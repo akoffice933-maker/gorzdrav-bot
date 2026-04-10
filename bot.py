@@ -1,8 +1,6 @@
 import asyncio
 import datetime
-import secrets
 import io
-from urllib.parse import urlencode
 from cachetools import TTLCache
 
 from aiogram import Bot, Dispatcher, types, F
@@ -13,16 +11,18 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKe
 from PIL import Image
 import easyocr
 
-from config import BOT_TOKEN, ESIA_CLIENT_ID, ESIA_REDIRECT_URI, ESIA_PRIVATE_KEY_PATH, MAX_FILE_SIZE_MB, OCR_LANGUAGES, CACHE_TTL
+from config import BOT_TOKEN, MAX_FILE_SIZE_MB, OCR_LANGUAGES, CACHE_TTL
 from gorzdrav_api import (
     get_districts, get_lpus_by_district, get_specialties,
-    get_doctors, get_free_appointments, close_session as close_api_session
+    get_doctors, get_free_appointments
 )
+from src.utils.http_client import close_session as close_http_session
 from ai_analyzer import suggest_tests, analyze_lab_result, answer_question
 from src.models.database import SessionLocal, User, AnalysisHistory, init_db
 from src.utils.logger import logger
 from src.utils.validators import validate_medical_input, validate_file_size, sanitize_string
 from src.utils.ratelimit import rate_limiter
+from src.utils.db_async import run_db_operation
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -52,37 +52,6 @@ class MedStates(StatesGroup):
     waiting_appointment = State()
     waiting_question = State()
     waiting_lab_result = State()
-    waiting_esia_code = State()
-
-
-# ---------- ЕСИА АВТОРИЗАЦИЯ ----------
-class EsiaConnector:
-    def __init__(self, client_id, redirect_uri, private_key_path):
-        self.client_id = client_id
-        self.redirect_uri = redirect_uri
-        try:
-            with open(private_key_path) as f:
-                self.private_key = f.read()
-        except FileNotFoundError:
-            self.private_key = None
-
-    def get_auth_url(self, state):
-        """Генерирует URL для перехода пользователя на Госуслуги"""
-        params = {
-            'client_id': self.client_id,
-            'response_type': 'code',
-            'redirect_uri': self.redirect_uri,
-            'scope': 'openid fullname birthdate snils',
-            'state': state
-        }
-        auth_url = "https://esia.gosuslugi.ru/aas/oauth2/ac?" + urlencode(params)
-        return auth_url
-
-    def get_tokens(self, code):
-        """Обменивает временный код на токены доступа (демо)"""
-        # В реальном проекте здесь POST запрос с JWT подписью
-        logger.warning("ESIA get_tokens called with demo implementation")
-        return {'access_token': 'demo_token'}
 
 
 # ---------- OCR В ОТДЕЛЬНОМ ПОТОКЕ ----------
@@ -111,19 +80,22 @@ async def cmd_start(message: Message, state: FSMContext):
             await message.answer("Слишком много команд. Подождите минуту.")
             return
 
-        # Регистрируем пользователя
-        session = SessionLocal()
-        try:
-            existing_user = session.query(User).filter_by(tg_id=message.from_user.id).first()
-            if not existing_user:
-                session.add(User(tg_id=message.from_user.id))
-                session.commit()
-                logger.info(f"New user registered: {message.from_user.id}")
-        except Exception as e:
-            logger.error(f"Error saving user: {e}", exc_info=True)
-            session.rollback()
-        finally:
-            session.close()
+        # Регистрируем пользователя (в отдельном потоке)
+        def _register_user():
+            session = SessionLocal()
+            try:
+                existing_user = session.query(User).filter_by(tg_id=message.from_user.id).first()
+                if not existing_user:
+                    session.add(User(tg_id=message.from_user.id))
+                    session.commit()
+                    logger.info(f"New user registered: {message.from_user.id}")
+            except Exception as e:
+                logger.error(f"Error saving user: {e}", exc_info=True)
+                session.rollback()
+            finally:
+                session.close()
+
+        await asyncio.to_thread(_register_user)
 
         # Главное меню
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -197,75 +169,39 @@ async def ask_handler(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query(F.data == "book")
 async def book_handler(call: CallbackQuery, state: FSMContext):
+    """Начало записи к врачу — без ЕСИА, запись через сайт вручную"""
     try:
-        session = SessionLocal()
-        user = session.query(User).filter_by(tg_id=call.from_user.id).first()
-        session.close()
-
-        if not user or not user.esia_token:
-            # Требуется авторизация через Госуслуги
-            esia = EsiaConnector(ESIA_CLIENT_ID, ESIA_REDIRECT_URI, ESIA_PRIVATE_KEY_PATH)
-            state_param = secrets.token_urlsafe(16)
-            auth_url = esia.get_auth_url(state_param)
-
-            await call.message.answer(
-                "🔐 Требуется авторизация через Госуслуги.\n\n"
-                f"[Нажмите для входа]({auth_url})\n\n"
-                "После входа получите код и отправьте его боту.",
-                parse_mode="Markdown"
-            )
-            await state.set_state(MedStates.waiting_esia_code)
-            await call.answer()
-            return
-
-        # Если уже авторизован, продолжаем запись
-        await start_booking_flow(call, state)
+        await _start_booking_flow(call.message, state)
+        await call.answer()
     except Exception as e:
         logger.error(f"Error in book_handler: {e}", exc_info=True)
         await call.message.answer("Произошла ошибка. Попробуйте снова.")
 
 
-async def start_booking_flow(call: CallbackQuery, state: FSMContext):
-    """Начало процесса записи к врачу (из callback)"""
-    try:
-        districts = await get_districts()
-        if not districts:
-            await call.message.answer("Не удалось загрузить районы. Попробуйте позже.")
-            return
-        await state.update_data(districts=districts)
-        buttons = [[InlineKeyboardButton(text=d["name"], callback_data=f"dist_{d['id']}")] for d in districts[:15]]
-        buttons.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")])
-        await call.message.edit_text("🏥 Выберите район:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
-        await state.set_state(MedStates.waiting_district)
-        await call.answer()
-    except Exception as e:
-        logger.error(f"Error in start_booking_flow: {e}", exc_info=True)
-        await call.message.answer("Произошла ошибка. Попробуйте снова.")
-
-
-async def start_booking_flow_for_message(message: Message, state: FSMContext):
-    """Начало процесса записи к врачу (из обычного сообщения)"""
-    try:
-        districts = await get_districts()
-        if not districts:
-            await message.answer("Не удалось загрузить районы. Попробуйте позже.")
-            return
-        await state.update_data(districts=districts)
-        buttons = [[InlineKeyboardButton(text=d["name"], callback_data=f"dist_{d['id']}")] for d in districts[:15]]
-        buttons.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")])
-        await message.answer("🏥 Выберите район:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
-        await state.set_state(MedStates.waiting_district)
-    except Exception as e:
-        logger.error(f"Error in start_booking_flow_for_message: {e}", exc_info=True)
-        await message.answer("Произошла ошибка. Попробуйте снова.")
+async def _start_booking_flow(target, state: FSMContext):
+    """Универсальное начало записи — принимает Message или CallbackQuery.message"""
+    districts = await get_districts()
+    if not districts:
+        await target.answer("Не удалось загрузить районы. Попробуйте позже.")
+        return
+    await state.update_data(districts=districts)
+    buttons = [[InlineKeyboardButton(text=d["name"], callback_data=f"dist_{d['id']}")] for d in districts[:15]]
+    buttons.append([InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")])
+    await target.answer("🏥 Выберите район:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
+    await state.set_state(MedStates.waiting_district)
 
 
 @dp.callback_query(F.data == "my_appointments")
 async def my_appointments(call: CallbackQuery):
     try:
-        session = SessionLocal()
-        user = session.query(User).filter_by(tg_id=call.from_user.id).first()
-        session.close()
+        def _get_user_appointment():
+            session = SessionLocal()
+            try:
+                return session.query(User).filter_by(tg_id=call.from_user.id).first()
+            finally:
+                session.close()
+
+        user = await asyncio.to_thread(_get_user_appointment)
 
         if user and user.appointment_time and user.doctor_name:
             await call.message.answer(
@@ -280,33 +216,6 @@ async def my_appointments(call: CallbackQuery):
         await call.answer()
     except Exception as e:
         logger.error(f"Error in my_appointments: {e}", exc_info=True)
-
-
-@dp.message(MedStates.waiting_esia_code)
-async def handle_esia_code(message: Message, state: FSMContext):
-    """Обработка кода авторизации ЕСИА"""
-    try:
-        code = message.text.strip()
-        esia = EsiaConnector(ESIA_CLIENT_ID, ESIA_REDIRECT_URI, ESIA_PRIVATE_KEY_PATH)
-
-        # В реальном проекте здесь обмен кода на токен
-        tokens = esia.get_tokens(code)
-
-        session = SessionLocal()
-        user = session.query(User).filter_by(tg_id=message.from_user.id).first()
-        if user:
-            user.esia_token = tokens['access_token']
-            session.commit()
-        session.close()
-
-        await message.answer("✅ Авторизация успешна! Теперь вы можете записаться к врачу.")
-        await state.clear()
-
-        # Автоматически начинаем запись
-        await start_booking_flow_for_message(message, state)
-    except Exception as e:
-        logger.error(f"Error in handle_esia_code: {e}", exc_info=True)
-        await message.answer("Произошла ошибка авторизации. Попробуйте снова.")
 
 
 # ---------- ЗАПИСЬ К ВРАЧУ (с кэшем) ----------
@@ -327,17 +236,8 @@ async def district_chosen(call: CallbackQuery, state: FSMContext):
 
         await state.update_data(lpus=lpus)
 
-        # Кодируем имя поликлиники в callback_data (до 64 байт)
-        buttons = []
-        for l in lpus[:15]:
-            lpu_name = l.get("name", "")
-            lpu_id = l.get("id", "")
-            encoded_name = lpu_name[:30].encode('utf-8', errors='ignore').decode('utf-8', errors='ignore')
-            callback = f"lpu_{lpu_id}_{encoded_name}"
-            if len(callback.encode()) > 64:
-                callback = f"lpu_{lpu_id}"
-            buttons.append([InlineKeyboardButton(text=lpu_name[:50], callback_data=callback)])
-
+        # В callback_data только ID — имена храним в state
+        buttons = [[InlineKeyboardButton(text=l["name"][:50], callback_data=f"lpu_{l['id']}")] for l in lpus[:15]]
         buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_districts")])
         await call.message.edit_text("🏥 Выберите поликлинику:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
         await state.set_state(MedStates.waiting_lpu)
@@ -350,13 +250,12 @@ async def district_chosen(call: CallbackQuery, state: FSMContext):
 @dp.callback_query(MedStates.waiting_lpu, F.data.startswith("lpu_"))
 async def lpu_chosen(call: CallbackQuery, state: FSMContext):
     try:
-        callback_parts = call.data.split("_", 2)
-        lpu_id = int(callback_parts[1])
+        lpu_id = int(call.data.split("_")[1])
 
-        # Извлекаем имя поликлиники из callback_data если есть
-        lpu_name = ""
-        if len(callback_parts) > 2:
-            lpu_name = callback_parts[2]
+        # Ищем имя поликлиники в сохранённом списке
+        data = await state.get_data()
+        lpus = data.get("lpus", [])
+        lpu_name = next((l.get("name", "") for l in lpus if l.get("id") == lpu_id), "")
 
         specialties = await get_specialties(lpu_id)
 
@@ -391,20 +290,9 @@ async def specialty_chosen(call: CallbackQuery, state: FSMContext):
             await call.message.answer("Нет доступных врачей по данной специальности.")
             return
 
-        await state.update_data(specialty_id=specialty_id)
-
-        # Сохраняем имена врачей для использования при callback
-        buttons = []
-        for d in doctors[:15]:
-            doc_name = d.get("name", "")
-            doc_id = d.get("id", "")
-            # Кодируем имя врача в callback_data (до 64 байт)
-            encoded_name = doc_name[:30].encode('utf-8', errors='ignore').decode('utf-8', errors='ignore')
-            callback = f"doc_{doc_id}_{encoded_name}"
-            if len(callback.encode()) > 64:
-                callback = f"doc_{doc_id}"
-            buttons.append([InlineKeyboardButton(text=doc_name[:50], callback_data=callback)])
-
+        # Сохраняем список врачей в state для поиска имён, в callback_data только ID
+        await state.update_data(specialty_id=specialty_id, doctors=doctors)
+        buttons = [[InlineKeyboardButton(text=d["name"][:50], callback_data=f"doc_{d['id']}")] for d in doctors[:15]]
         buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_specialties")])
         await call.message.edit_text("👤 Выберите врача:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
         await state.set_state(MedStates.waiting_doctor)
@@ -419,13 +307,11 @@ async def doctor_chosen(call: CallbackQuery, state: FSMContext):
     try:
         data = await state.get_data()
         lpu_id = data.get("lpu_id")
-        callback_parts = call.data.split("_", 2)  # doc_{id}_{name} или doc_{id}
-        doctor_id = int(callback_parts[1])
+        doctor_id = int(call.data.split("_")[1])
 
-        # Извлекаем имя врача из callback_data если есть
-        doctor_name = ""
-        if len(callback_parts) > 2:
-            doctor_name = callback_parts[2]
+        # Ищем имя врача в сохранённом списке
+        doctors = data.get("doctors", [])
+        doctor_name = next((d.get("name", "") for d in doctors if d.get("id") == doctor_id), "")
 
         appointments = await get_free_appointments(lpu_id, doctor_id)
 
@@ -433,19 +319,19 @@ async def doctor_chosen(call: CallbackQuery, state: FSMContext):
             await call.message.answer("Нет свободных записей у этого врача.")
             return
 
-        # Сохраняем данные для дальнейшего использования
+        # Сохраняем данные и время для дальнейшего использования
         await state.update_data(
             doctor_id=doctor_id,
             doctor_name=doctor_name,
+            appointments=appointments,
         )
 
-        # Формируем кнопки с закодированным временем в callback_data
+        # В callback_data только ID + короткое время (до 64 байт)
         buttons = []
         for a in appointments[:10]:
             time_str = a.get("time", "")
-            # Кодируем время в callback_data: appt_{id}_{ISO_time}
-            # Telegram ограничивает callback_data 64 байтами, поэтому укорачиваем
-            short_time = time_str.replace("-", "").replace(":", "").replace("T", "T")[:16]  # 2024-04-10T14:30 -> 2024-04-10T14:3
+            # Кодируем время: убираем разделители для экономии места
+            short_time = time_str.replace("-", "").replace(":", "").replace("T", "T")[:16]
             callback = f"appt_{a['id']}_{short_time}"
             if len(callback.encode()) > 64:
                 callback = f"appt_{a['id']}"
@@ -490,20 +376,25 @@ async def appointment_chosen(call: CallbackQuery, state: FSMContext):
                 pass
 
         if not appointment_time:
-            appointment_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=3)
+            appointment_time = datetime.datetime.utcnow() + datetime.timedelta(days=3)
 
-        # Сохраняем запись в БД
-        session = SessionLocal()
-        user = session.query(User).filter_by(tg_id=call.from_user.id).first()
-        if user:
-            user.doctor_id = doctor_id
-            user.doctor_name = sanitize_string(doctor_name, 100)
-            user.lpu_id = lpu_id
-            user.lpu_name = sanitize_string(lpu_name, 100)
-            user.appointment_time = appointment_time
-            user.reminder_sent = False
-            session.commit()
-        session.close()
+        # Сохраняем запись в БД (в отдельном потоке)
+        def _save_appointment():
+            session = SessionLocal()
+            try:
+                user = session.query(User).filter_by(tg_id=call.from_user.id).first()
+                if user:
+                    user.doctor_id = doctor_id
+                    user.doctor_name = sanitize_string(doctor_name, 100)
+                    user.lpu_id = lpu_id
+                    user.lpu_name = sanitize_string(lpu_name, 100)
+                    user.appointment_time = appointment_time
+                    user.reminder_sent = False
+                    session.commit()
+            finally:
+                session.close()
+
+        await asyncio.to_thread(_save_appointment)
 
         # Формируем ссылки и кнопки
         gorzdrav_url = "https://gorzdrav.spb.ru/"
@@ -624,16 +515,21 @@ async def handle_photo(message: Message, state: FSMContext):
         analysis = await analyze_lab_result(ocr_text)
         await message.answer(analysis)
 
-        # Сохраняем в историю
-        session = SessionLocal()
-        session.add(AnalysisHistory(
-            tg_id=message.from_user.id,
-            analysis_type='ocr',
-            raw_text=ocr_text,
-            ai_analysis=analysis
-        ))
-        session.commit()
-        session.close()
+        # Сохраняем в историю (в отдельном потоке)
+        def _save_ocr_history():
+            session = SessionLocal()
+            try:
+                session.add(AnalysisHistory(
+                    tg_id=message.from_user.id,
+                    analysis_type='ocr',
+                    raw_text=ocr_text,
+                    ai_analysis=analysis
+                ))
+                session.commit()
+            finally:
+                session.close()
+
+        await asyncio.to_thread(_save_ocr_history)
 
     except Exception as e:
         logger.error(f"Photo handler error: {e}", exc_info=True)
@@ -659,15 +555,21 @@ async def handle_lab_text(message: Message, state: FSMContext):
         analysis = await analyze_lab_result(result)
         await message.answer(analysis)
 
-        session = SessionLocal()
-        session.add(AnalysisHistory(
-            tg_id=message.from_user.id,
-            analysis_type='text',
-            raw_text=result,
-            ai_analysis=analysis
-        ))
-        session.commit()
-        session.close()
+        # Сохраняем в историю (в отдельном потоке)
+        def _save_text_history():
+            session = SessionLocal()
+            try:
+                session.add(AnalysisHistory(
+                    tg_id=message.from_user.id,
+                    analysis_type='text',
+                    raw_text=result,
+                    ai_analysis=analysis
+                ))
+                session.commit()
+            finally:
+                session.close()
+
+        await asyncio.to_thread(_save_text_history)
         await state.clear()
     except Exception as e:
         logger.error(f"Lab text handler error: {e}", exc_info=True)
@@ -678,21 +580,29 @@ async def handle_lab_text(message: Message, state: FSMContext):
 @dp.message(Command("cancel_booking"))
 async def cancel_booking(message: Message, state: FSMContext):
     try:
-        session = SessionLocal()
-        user = session.query(User).filter_by(tg_id=message.from_user.id).first()
-        if user:
-            user.appointment_time = None
-            user.doctor_id = None
-            user.doctor_name = None
-            user.lpu_id = None
-            user.lpu_name = None
-            user.district_id = None
-            user.reminder_sent = False
-            session.commit()
+        def _cancel_booking():
+            session = SessionLocal()
+            try:
+                user = session.query(User).filter_by(tg_id=message.from_user.id).first()
+                if user:
+                    user.appointment_time = None
+                    user.doctor_id = None
+                    user.doctor_name = None
+                    user.lpu_id = None
+                    user.lpu_name = None
+                    user.district_id = None
+                    user.reminder_sent = False
+                    session.commit()
+                    return True
+                return False
+            finally:
+                session.close()
+
+        had_appointment = await asyncio.to_thread(_cancel_booking)
+        if had_appointment:
             await message.answer("🗑️ Ваша запись отменена.")
         else:
             await message.answer("📭 У вас нет активных записей.")
-        session.close()
     except Exception as e:
         logger.error(f"Error in cancel_booking: {e}", exc_info=True)
         await message.answer("Произошла ошибка. Попробуйте снова.")
@@ -807,37 +717,53 @@ async def reminder_checker():
     """Проверяет каждые 30 минут и отправляет напоминания"""
     while True:
         try:
-            now = datetime.datetime.now(datetime.timezone.utc)
-            session = SessionLocal()
+            now = datetime.datetime.utcnow()
 
-            try:
-                users_for_reminder = session.query(User).filter(
-                    User.appointment_time > now,
-                    User.appointment_time < now + datetime.timedelta(hours=3),
-                    User.reminder_sent == False
-                ).all()
+            # Получаем пользователей для напоминаний (в отдельном потоке)
+            def _get_reminder_users():
+                session = SessionLocal()
+                try:
+                    users = session.query(User).filter(
+                        User.appointment_time > now,
+                        User.appointment_time < now + datetime.timedelta(hours=3),
+                        User.reminder_sent == False
+                    ).all()
+                    # Сериализуем данные, чтобы не держать сессию открытой
+                    return [(u.tg_id, u.doctor_name, u.lpu_name, u.appointment_time, u.id) for u in users]
+                finally:
+                    session.close()
 
-                for user in users_for_reminder:
-                    try:
-                        await bot.send_message(
-                            user.tg_id,
-                            f"⏰ **Напоминание о визите!**\n\n"
-                            f"👨‍⚕️ {sanitize_string(user.doctor_name, 100)}\n"
-                            f"🏥 {sanitize_string(user.lpu_name, 100)}\n"
-                            f"⏰ {user.appointment_time.strftime('%d.%m.%Y в %H:%M')}\n\n"
-                            f"Не забудьте взять паспорт и полис ОМС!",
-                            parse_mode="Markdown"
-                        )
-                        user.reminder_sent = True
-                        session.commit()
-                        logger.info(f"Reminder sent to user {user.tg_id}")
+            reminder_users = await asyncio.to_thread(_get_reminder_users)
 
-                    except Exception as e:
-                        logger.error(f"Failed to send reminder to {user.tg_id}: {e}")
-                        continue
+            for tg_id, doctor_name, lpu_name, appt_time, user_id in reminder_users:
+                try:
+                    await bot.send_message(
+                        tg_id,
+                        f"⏰ **Напоминание о визите!**\n\n"
+                        f"👨‍⚕️ {sanitize_string(doctor_name, 100)}\n"
+                        f"🏥 {sanitize_string(lpu_name, 100)}\n"
+                        f"⏰ {appt_time.strftime('%d.%m.%Y в %H:%M')}\n\n"
+                        f"Не забудьте взять паспорт и полис ОМС!",
+                        parse_mode="Markdown"
+                    )
 
-            finally:
-                session.close()
+                    # Отмечаем как отправленное (в отдельном потоке)
+                    def _mark_reminder_sent(uid):
+                        session = SessionLocal()
+                        try:
+                            u = session.query(User).filter_by(id=uid).first()
+                            if u:
+                                u.reminder_sent = True
+                                session.commit()
+                        finally:
+                            session.close()
+
+                    await asyncio.to_thread(_mark_reminder_sent, user_id)
+                    logger.info(f"Reminder sent to user {tg_id}")
+
+                except Exception as e:
+                    logger.error(f"Failed to send reminder to {tg_id}: {e}")
+                    continue
 
         except Exception as e:
             logger.error(f"Error in reminder_checker: {e}", exc_info=True)
@@ -882,7 +808,7 @@ async def main():
                 logger.info("Reminder task cancelled")
 
         await bot.session.close()
-        await close_api_session()
+        await close_http_session()
 
 
 if __name__ == "__main__":

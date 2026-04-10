@@ -32,8 +32,8 @@ Base = declarative_base()
 
 
 def _now_utc() -> datetime.datetime:
-    """Возвращает timezone-aware текущее время в UTC"""
-    return datetime.datetime.now(datetime.timezone.utc)
+    """Возвращает naive UTC время (SQLite не поддерживает timezone)"""
+    return datetime.datetime.utcnow()
 
 
 class User(Base):
@@ -48,16 +48,16 @@ class User(Base):
     lpu_name = Column(String(255), nullable=True)
     doctor_id = Column(Integer, nullable=True)
     doctor_name = Column(String(255), nullable=True)
-    appointment_time = Column(DateTime(timezone=True), nullable=True)
+    appointment_time = Column(DateTime, nullable=True)
     reminder_sent = Column(Boolean, default=False)
 
     # Авторизация ESIA
     esia_token = Column(Text, nullable=True)
-    esia_token_expires = Column(DateTime(timezone=True), nullable=True)
+    esia_token_expires = Column(DateTime, nullable=True)
 
     # Служебное
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     __table_args__ = (
         Index('idx_tg_id_appointment', 'tg_id', 'appointment_time'),
@@ -74,7 +74,7 @@ class AnalysisHistory(Base):
     raw_text = Column(Text, nullable=False)
     ai_analysis = Column(Text, nullable=False)
 
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+    created_at = Column(DateTime, server_default=func.now(), index=True)
 
     __table_args__ = (
         Index('idx_tg_id_created', 'tg_id', 'created_at'),

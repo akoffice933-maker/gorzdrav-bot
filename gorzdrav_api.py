@@ -2,29 +2,11 @@ import aiohttp
 from typing import List, Dict
 import asyncio
 from src.utils.logger import logger
+from src.utils.http_client import get_session
 from config import API_TIMEOUT, MAX_RETRIES
 
 BASE_URL = "https://gorzdrav.spb.ru/_api/api/v2"
 HEADERS = {"User-Agent": "GorzdravBot/1.0"}
-
-# Переиспользуемая сессия на весь модуль
-_session: aiohttp.ClientSession | None = None
-
-
-async def get_session() -> aiohttp.ClientSession:
-    """Возвращает или создаёт глобальную сессию"""
-    global _session
-    if _session is None or _session.closed:
-        _session = aiohttp.ClientSession()
-    return _session
-
-
-async def close_session():
-    """Закрывает глобальную сессию"""
-    global _session
-    if _session and not _session.closed:
-        await _session.close()
-        _session = None
 
 
 async def _safe_request(url: str, retry: int = 0) -> List[Dict]:

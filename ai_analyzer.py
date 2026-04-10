@@ -3,6 +3,7 @@ import asyncio
 from config import OPENROUTER_API_KEY
 from src.utils.logger import logger
 from src.utils.validators import validate_medical_input
+from src.utils.http_client import get_session
 
 DISCLAIMER = "\n\n---\n⚠️ **Важно**: Это не замена консультации врача. Я только помогаю с информацией. Все решения принимайте с врачом."
 
@@ -12,54 +13,57 @@ TIMEOUT = 20
 
 async def call_qwen(prompt: str, retry: int = 0) -> str:
     """
-    Вызов Qwen через OpenRouter с обработкой ошибок
+    Вызов Qwen через OpenRouter с обработкой ошибок.
+    Использует общую HTTP-сессию (не создаёт новую на каждый вызов).
     """
     if not prompt or len(prompt) > 4000:
         logger.warning(f"Invalid prompt length: {len(prompt) if prompt else 0}")
         return "Ошибка обработки входных данных" + DISCLAIMER
 
     try:
+        session = await get_session()
         timeout = aiohttp.ClientTimeout(total=TIMEOUT)
-        async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": "https://github.com",
-                    "X-Title": "Gorzdrav Medical Bot"
-                },
-                json={
-                    "model": "qwen/qwen3.6-plus-preview",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.3,
-                    "max_tokens": 1500
-                }
-            ) as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    result = data["choices"][0]["message"]["content"]
-                    logger.info(f"Successful API call (retry: {retry})")
-                    return result + DISCLAIMER
 
-                elif resp.status == 429:  # Rate limited
-                    if retry < MAX_RETRIES:
-                        wait_time = 2 ** retry  # 1, 2, 4 секунды
-                        logger.warning(f"Rate limited, retry #{retry + 1} after {wait_time}s")
-                        await asyncio.sleep(wait_time)
-                        return await call_qwen(prompt, retry + 1)
-                    else:
-                        logger.error("Max retries exceeded due to rate limiting")
-                        return "API перегружен. Попробуйте через минуту." + DISCLAIMER
+        async with session.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://github.com",
+                "X-Title": "Gorzdrav Medical Bot"
+            },
+            json={
+                "model": "qwen/qwen3.6-plus-preview",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3,
+                "max_tokens": 1500
+            },
+            timeout=timeout
+        ) as resp:
+            if resp.status == 200:
+                data = await resp.json()
+                result = data["choices"][0]["message"]["content"]
+                logger.info(f"Successful API call (retry: {retry})")
+                return result + DISCLAIMER
 
-                elif resp.status == 401:
-                    logger.error("Invalid API key")
-                    return "Ошибка конфигурации API" + DISCLAIMER
-
+            elif resp.status == 429:  # Rate limited
+                if retry < MAX_RETRIES:
+                    wait_time = 2 ** retry
+                    logger.warning(f"Rate limited, retry #{retry + 1} after {wait_time}s")
+                    await asyncio.sleep(wait_time)
+                    return await call_qwen(prompt, retry + 1)
                 else:
-                    error_text = await resp.text()
-                    logger.error(f"API error {resp.status}: {error_text[:200]}")
-                    return f"Ошибка API {resp.status}. Попробуйте позже." + DISCLAIMER
+                    logger.error("Max retries exceeded due to rate limiting")
+                    return "API перегружен. Попробуйте через минуту." + DISCLAIMER
+
+            elif resp.status == 401:
+                logger.error("Invalid API key")
+                return "Ошибка конфигурации API" + DISCLAIMER
+
+            else:
+                error_text = await resp.text()
+                logger.error(f"API error {resp.status}: {error_text[:200]}")
+                return f"Ошибка API {resp.status}. Попробуйте позже." + DISCLAIMER
 
     except asyncio.TimeoutError:
         logger.warning(f"Timeout on attempt {retry}")
