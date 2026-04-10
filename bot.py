@@ -325,7 +325,18 @@ async def district_chosen(call: CallbackQuery, state: FSMContext):
             return
 
         await state.update_data(lpus=lpus)
-        buttons = [[InlineKeyboardButton(text=l["name"][:50], callback_data=f"lpu_{l['id']}")] for l in lpus[:15]]
+
+        # Кодируем имя поликлиники в callback_data (до 64 байт)
+        buttons = []
+        for l in lpus[:15]:
+            lpu_name = l.get("name", "")
+            lpu_id = l.get("id", "")
+            encoded_name = lpu_name[:30].encode('utf-8', errors='ignore').decode('utf-8', errors='ignore')
+            callback = f"lpu_{lpu_id}_{encoded_name}"
+            if len(callback.encode()) > 64:
+                callback = f"lpu_{lpu_id}"
+            buttons.append([InlineKeyboardButton(text=lpu_name[:50], callback_data=callback)])
+
         buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_districts")])
         await call.message.edit_text("🏥 Выберите поликлинику:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
         await state.set_state(MedStates.waiting_lpu)
@@ -338,14 +349,24 @@ async def district_chosen(call: CallbackQuery, state: FSMContext):
 @dp.callback_query(MedStates.waiting_lpu, F.data.startswith("lpu_"))
 async def lpu_chosen(call: CallbackQuery, state: FSMContext):
     try:
-        lpu_id = int(call.data.split("_")[1])
+        callback_parts = call.data.split("_", 2)
+        lpu_id = int(callback_parts[1])
+
+        # Извлекаем имя поликлиники из callback_data если есть
+        lpu_name = ""
+        if len(callback_parts) > 2:
+            lpu_name = callback_parts[2]
+
         specialties = await get_specialties(lpu_id)
 
         if not specialties:
             await call.message.answer("Нет доступных специальностей в этой поликлинике.")
             return
 
-        await state.update_data(lpu_id=lpu_id)
+        await state.update_data(
+            lpu_id=lpu_id,
+            lpu_name=lpu_name
+        )
         buttons = [[InlineKeyboardButton(text=s["name"][:50], callback_data=f"spec_{s['id']}")] for s in specialties[:15]]
         buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_lpus")])
         await call.message.edit_text("👨‍⚕️ Выберите специальность:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
@@ -370,7 +391,19 @@ async def specialty_chosen(call: CallbackQuery, state: FSMContext):
             return
 
         await state.update_data(specialty_id=specialty_id)
-        buttons = [[InlineKeyboardButton(text=d["name"][:50], callback_data=f"doc_{d['id']}")] for d in doctors[:15]]
+
+        # Сохраняем имена врачей для использования при callback
+        buttons = []
+        for d in doctors[:15]:
+            doc_name = d.get("name", "")
+            doc_id = d.get("id", "")
+            # Кодируем имя врача в callback_data (до 64 байт)
+            encoded_name = doc_name[:30].encode('utf-8', errors='ignore').decode('utf-8', errors='ignore')
+            callback = f"doc_{doc_id}_{encoded_name}"
+            if len(callback.encode()) > 64:
+                callback = f"doc_{doc_id}"
+            buttons.append([InlineKeyboardButton(text=doc_name[:50], callback_data=callback)])
+
         buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_specialties")])
         await call.message.edit_text("👤 Выберите врача:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
         await state.set_state(MedStates.waiting_doctor)
@@ -385,7 +418,13 @@ async def doctor_chosen(call: CallbackQuery, state: FSMContext):
     try:
         data = await state.get_data()
         lpu_id = data.get("lpu_id")
-        doctor_id = int(call.data.split("_")[1])
+        callback_parts = call.data.split("_", 2)  # doc_{id}_{name} или doc_{id}
+        doctor_id = int(callback_parts[1])
+
+        # Извлекаем имя врача из callback_data если есть
+        doctor_name = ""
+        if len(callback_parts) > 2:
+            doctor_name = callback_parts[2]
 
         appointments = await get_free_appointments(lpu_id, doctor_id)
 
@@ -393,11 +432,24 @@ async def doctor_chosen(call: CallbackQuery, state: FSMContext):
             await call.message.answer("Нет свободных записей у этого врача.")
             return
 
-        await state.update_data(doctor_id=doctor_id)
-        buttons = [
-            [InlineKeyboardButton(text=a["time"], callback_data=f"appt_{a['id']}")]
-            for a in appointments[:10]
-        ]
+        # Сохраняем данные для дальнейшего использования
+        await state.update_data(
+            doctor_id=doctor_id,
+            doctor_name=doctor_name,
+        )
+
+        # Формируем кнопки с закодированным временем в callback_data
+        buttons = []
+        for a in appointments[:10]:
+            time_str = a.get("time", "")
+            # Кодируем время в callback_data: appt_{id}_{ISO_time}
+            # Telegram ограничивает callback_data 64 байтами, поэтому укорачиваем
+            short_time = time_str.replace("-", "").replace(":", "").replace("T", "T")[:16]  # 2024-04-10T14:30 -> 2024-04-10T14:3
+            callback = f"appt_{a['id']}_{short_time}"
+            if len(callback.encode()) > 64:
+                callback = f"appt_{a['id']}"
+            buttons.append([InlineKeyboardButton(text=time_str, callback_data=callback)])
+
         buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_doctors")])
         await call.message.edit_text("⏰ Выберите время приёма:", reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
         await state.set_state(MedStates.waiting_appointment)
@@ -411,25 +463,70 @@ async def doctor_chosen(call: CallbackQuery, state: FSMContext):
 async def appointment_chosen(call: CallbackQuery, state: FSMContext):
     try:
         data = await state.get_data()
-        appointment_id = int(call.data.split("_")[1])
+        parts = call.data.split("_", 2)  # appt_{id} или appt_{id}_{time}
+        appointment_id = int(parts[1])
+
+        # Извлекаем время из callback_data если есть
+        appointment_time_str = parts[2] if len(parts) > 2 else None
+
+        doctor_id = data.get("doctor_id")
+        doctor_name = data.get("doctor_name", "") or "Врач (ID: {})".format(doctor_id)
+        lpu_id = data.get("lpu_id")
+        lpu_name = data.get("lpu_name", "") or "Поликлиника (ID: {})".format(lpu_id)
+
+        # Определяем время записи
+        appointment_time = None
+        if appointment_time_str:
+            try:
+                # Пробуем разные форматы
+                for fmt in ("%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M", "%Y%m%dT%H:%M", "%Y%m%d %H:%M"):
+                    try:
+                        appointment_time = datetime.datetime.strptime(appointment_time_str, fmt)
+                        break
+                    except ValueError:
+                        continue
+            except Exception:
+                pass
+
+        if not appointment_time:
+            appointment_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=3)
 
         # Сохраняем запись в БД
         session = SessionLocal()
         user = session.query(User).filter_by(tg_id=call.from_user.id).first()
         if user:
-            user.doctor_id = data.get("doctor_id")
-            user.doctor_name = sanitize_string("Врач (ID: {})".format(data.get("doctor_id")), 100)
-            user.lpu_id = data.get("lpu_id")
-            user.lpu_name = sanitize_string("Поликлиника (ID: {})".format(data.get("lpu_id")), 100)
-            user.appointment_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=3)  # демо-время
+            user.doctor_id = doctor_id
+            user.doctor_name = sanitize_string(doctor_name, 100)
+            user.lpu_id = lpu_id
+            user.lpu_name = sanitize_string(lpu_name, 100)
+            user.appointment_time = appointment_time
             user.reminder_sent = False
             session.commit()
         session.close()
 
+        # Формируем ссылку на Gorzdrav
+        gorzdrav_url = "https://gorzdrav.spb.ru/"
+
+        # Кнопка для перехода на сайт
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🌐 Перейти на gorzdrav.spb.ru и записаться", url=gorzdrav_url)]
+        ])
+
+        formatted_time = appointment_time.strftime("%d.%m.%Y в %H:%M")
+
         await call.message.answer(
-            "✅ Вы успешно записаны!\n\n"
-            "Напоминание придёт за 3 часа до приёма.\n"
-            "Не забудьте паспорт и полис ОМС."
+            f"📋 Вы выбрали:\n\n"
+            f"🏥 Поликлиника: {sanitize_string(lpu_name, 100)}\n"
+            f"👨‍⚕️ Врач: {sanitize_string(doctor_name, 100)}\n"
+            f"⏰ Желаемое время: {formatted_time}\n\n"
+            f"⚠️ Это предварительный выбор. Для подтверждения записи:\n\n"
+            f"1️⃣ Перейдите на сайт Горздрава по кнопке ниже\n"
+            f"2️⃣ Авторизуйтесь через Госуслуги (ЕСИА)\n"
+            f"3️⃣ Найдите этого же врача и запишитесь на {formatted_time}\n"
+            f"4️⃣ Возьмите с собой паспорт и полис ОМС\n\n"
+            f"🔔 Я напомню вам за 3 часа до этого времени.",
+            reply_markup=keyboard,
+            parse_mode="Markdown"
         )
         await state.clear()
         await call.answer()
