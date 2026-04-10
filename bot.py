@@ -131,7 +131,8 @@ async def cmd_start(message: Message, state: FSMContext):
             [InlineKeyboardButton(text="🔬 Расшифровать анализ", callback_data="analyze")],
             [InlineKeyboardButton(text="💊 Спросить у ИИ", callback_data="ask")],
             [InlineKeyboardButton(text="📋 Симптомы → анализы", callback_data="symptoms")],
-            [InlineKeyboardButton(text="📅 Мои записи", callback_data="my_appointments")]
+            [InlineKeyboardButton(text="📅 Мои записи", callback_data="my_appointments")],
+            [InlineKeyboardButton(text="📖 Помощь с VPN", callback_data="help_vpn")]
         ])
         await message.answer(
             "👋 Привет! Я медицинский помощник с ИИ.\n\n"
@@ -504,12 +505,13 @@ async def appointment_chosen(call: CallbackQuery, state: FSMContext):
             session.commit()
         session.close()
 
-        # Формируем ссылку на Gorzdrav
+        # Формируем ссылки и кнопки
         gorzdrav_url = "https://gorzdrav.spb.ru/"
 
-        # Кнопка для перехода на сайт
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="🌐 Перейти на gorzdrav.spb.ru и записаться", url=gorzdrav_url)]
+            [InlineKeyboardButton(text="🌐 Открыть gorzdrav.spb.ru", url=gorzdrav_url)],
+            [InlineKeyboardButton(text="✅ Я записался через сайт", callback_data="confirmed_booking")],
+            [InlineKeyboardButton(text="📖 Помощь с VPN", callback_data="help_vpn")]
         ])
 
         formatted_time = appointment_time.strftime("%d.%m.%Y в %H:%M")
@@ -519,14 +521,18 @@ async def appointment_chosen(call: CallbackQuery, state: FSMContext):
             f"🏥 Поликлиника: {sanitize_string(lpu_name, 100)}\n"
             f"👨‍⚕️ Врач: {sanitize_string(doctor_name, 100)}\n"
             f"⏰ Желаемое время: {formatted_time}\n\n"
-            f"⚠️ Это предварительный выбор. Для подтверждения записи:\n\n"
-            f"1️⃣ Перейдите на сайт Горздрава по кнопке ниже\n"
-            f"2️⃣ Авторизуйтесь через Госуслуги (ЕСИА)\n"
-            f"3️⃣ Найдите этого же врача и запишитесь на {formatted_time}\n"
-            f"4️⃣ Возьмите с собой паспорт и полис ОМС\n\n"
-            f"🔔 Я напомню вам за 3 часа до этого времени.",
+            f"⚠️ Для завершения записи:\n\n"
+            f"1️⃣ <b>Выключите VPN</b> (Горздрав не работает через VPN)\n"
+            f"2️⃣ Откройте сайт по кнопке ниже\n"
+            f"3️⃣ Авторизуйтесь через Госуслуги\n"
+            f"4️⃣ Запишитесь на то же время: <b>{formatted_time}</b>\n"
+            f"5️⃣ Нажмите «Я записался через сайт»\n\n"
+            f"💡 Если Telegram не работает без VPN — используйте\n"
+            f"Split-tunneling: оставьте VPN только для Telegram,\n"
+            f"а для Горздрава — прямое подключение.\n\n"
+            f"🔔 Я напомню вам за 3 часа до визита.",
             reply_markup=keyboard,
-            parse_mode="Markdown"
+            parse_mode="HTML"
         )
         await state.clear()
         await call.answer()
@@ -701,6 +707,99 @@ async def cancel_handler(call: CallbackQuery, state: FSMContext):
         await call.answer()
     except Exception as e:
         logger.error(f"Error in cancel_handler: {e}", exc_info=True)
+
+
+# ---------- ПОДТВЕРЖДЕНИЕ ЗАПИСИ ----------
+@dp.callback_query(F.data == "confirmed_booking")
+async def confirmed_booking(call: CallbackQuery):
+    """Пользователь подтвердил, что записался через сайт"""
+    try:
+        await call.message.edit_text(
+            f"✅ Отлично! Запись подтверждена.\n\n"
+            f"📅 Я пришлю напоминание за 3 часа до визита.\n"
+            f"Не забудьте:\n"
+            f"• Паспорт\n"
+            f"• Полис ОМС\n"
+            f"• СНИЛС"
+        )
+        await call.answer()
+    except Exception as e:
+        logger.error(f"Error in confirmed_booking: {e}", exc_info=True)
+
+
+# ---------- ПОМОЩЬ С VPN ----------
+@dp.callback_query(F.data == "help_vpn")
+async def help_vpn_handler(call: CallbackQuery):
+    try:
+        await call.message.answer(
+            "🔧 <b>Почему Горздрав не работает через VPN:</b>\n\n"
+            "Государственные медсервисы РФ определяют иностранные IP и "
+            "блокируют доступ. Telegram при этом часто работает только через VPN.\n\n"
+            "✅ <b>Решение 1 — Выключить VPN</b>\n"
+            "1. Полностью отключите VPN\n"
+            "2. Откройте браузер → gorzdrav.spb.ru\n"
+            "3. Запишитесь через Госуслуги\n\n"
+            "✅ <b>Решение 2 — Split-tunneling</b>\n"
+            "Настройте VPN так, чтобы Telegram шёл через VPN,\n"
+            "а весь остальной трафик — напрямую.\n"
+            "Это поддерживают: Amnezia VPN, Outline, WireGuard.\n\n"
+            "✅ <b>Решение 3 — Российский VPN</b>\n"
+            "Используйте VPN-сервер в России (Amnezia, свой сервер).\n"
+            "Горздрав не блокирует российские IP.\n\n"
+            "✅ <b>Решение 4 — Мобильный интернет</b>\n"
+            "Отключите Wi-Fi → используйте мобильный интернет.\n"
+            "Откройте gorzdrav.spb.ru в браузере.\n\n"
+            "📞 <b>Альтернативы:</b>\n"
+            "• Телефон 122 (единая запись)\n"
+            "• Приложение «Госуслуги»\n"
+            "• Лично в регистратуре поликлиники",
+            parse_mode="HTML"
+        )
+        await call.answer()
+    except Exception as e:
+        logger.error(f"Error in help_vpn_handler: {e}", exc_info=True)
+
+
+@dp.message(Command("help_vpn"))
+async def cmd_help_vpn(message: Message):
+    """Команда помощи с VPN"""
+    try:
+        if not rate_limiter.is_allowed(f"user_{message.from_user.id}", limit=5, window_seconds=60):
+            await message.answer("Слишком много запросов. Подождите минуту.")
+            return
+
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🌐 Открыть gorzdrav.spb.ru", url="https://gorzdrav.spb.ru/")],
+            [InlineKeyboardButton(text="📋 Мои записи", callback_data="my_appointments")]
+        ])
+        await message.answer(
+            "🔧 <b>Почему Горздрав не работает через VPN:</b>\n\n"
+            "Государственные медсервисы РФ определяют иностранные IP и "
+            "блокируют доступ. Telegram при этом часто работает только через VPN.\n\n"
+            "✅ <b>Решение 1 — Выключить VPN</b>\n"
+            "1. Полностью отключите VPN\n"
+            "2. Откройте браузер → gorzdrav.spb.ru\n"
+            "3. Запишитесь через Госуслуги\n\n"
+            "✅ <b>Решение 2 — Split-tunneling</b>\n"
+            "Настройте VPN так, чтобы Telegram шёл через VPN,\n"
+            "а весь остальной трафик — напрямую.\n"
+            "Это поддерживают: Amnezia VPN, Outline, WireGuard.\n\n"
+            "✅ <b>Решение 3 — Российский VPN</b>\n"
+            "Используйте VPN-сервер в России.\n"
+            "Горздрав не блокирует российские IP.\n\n"
+            "✅ <b>Решение 4 — Мобильный интернет</b>\n"
+            "Отключите Wi-Fi → используйте мобильный интернет.\n"
+            "Откройте gorzdrav.spb.ru в браузере.\n\n"
+            "📞 <b>Альтернативы:</b>\n"
+            "• Телефон 122 (единая запись)\n"
+            "• Приложение «Госуслуги»\n"
+            "• Лично в регистратуре поликлиники",
+            reply_markup=keyboard,
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        logger.error(f"Error in cmd_help_vpn: {e}", exc_info=True)
+        await message.answer("Произошла ошибка. Попробуйте снова.")
 
 
 # ---------- НАПОМИНАНИЯ (фоновый таск с обработкой ошибок) ----------
