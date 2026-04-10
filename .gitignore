@@ -19,6 +19,9 @@ ENV/
 *.swp
 *.swo
 
+# Qwen
+.qwen/
+
 # Database
 *.db
 *.sqlite
@@ -43,3 +46,9 @@ uploads/
 
 # Migrations
 alembic/
+
+# Source text
+gorzdrav_bot.txt
+AUDIT_REPORT.md
+FIX_PLAN.md
+READY_CODE_EXAMPLES.md
