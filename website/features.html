@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Возможности | Горздрав Бот | Подробное описание функций</title>
+    <meta name="description" content="Подробное описание всех функций Telegram-бота Горздрав: запись к врачу, расшифровка анализов, анализ симптомов, ИИ-помощь">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                    <a href="index.html" class="logo-text">Горздрав Бот</a>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="features.html" class="nav-link active">Возможности</a>
+                    <a href="index.html#how-it-works" class="nav-link">Как это работает</a>
+                    <a href="index.html#faq" class="nav-link">FAQ</a>
+                    <a href="privacy.html" class="nav-link">Конфиденциальность</a>
+                    <a href="index.html#cta" class="btn btn-primary nav-cta">
+                        <i class="fas fa-paper-plane"></i> Открыть в Telegram
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" aria-label="Меню">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Features Header -->
+    <section class="features-header">
+        <div class="container">
+            <div class="features-header-content">
+                <h1 class="features-title">Полные возможности Горздрав Бот</h1>
+                <p class="features-subtitle">
+                    Изучите все функции нашего Telegram-бота для заботы о вашем здоровье
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Features -->
+    <section class="detailed-features">
+        <div class="container">
+            <!-- Feature 1: Запись к врачу -->
+            <div class="detailed-feature" id="appointment">
+                <div class="feature-media">
+                    <div class="feature-visual">
+                        <div class="visual-step">
+                            <div class="step-icon">1</div>
+                            <p>Выбор района СПб</p>
+                        </div>
+                        <div class="visual-step">
+                            <div class="step-icon">2</div>
+                            <p>Выбор поликлиники</p>
+                        </div>
+                        <div class="visual-step">
+                            <div class="step-icon">3</div>
+                            <p>Выбор врача</p>
+                        </div>
+                        <div class="visual-step">
+                            <div class="step-icon">4</div>
+                            <p>Выбор времени</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-content">
+                    <div class="feature-badge">
+                        <i class="fas fa-star"></i> Основная функция
+                    </div>
+                    <h2 class="feature-title">
+                        <i class="fas fa-calendar-check"></i> Запись к врачу через Горздрав
+                    </h2>
+                    <p class="feature-description">
+                        Полностью автоматизированная система записи к врачу через официальный API портала Горздрав Санкт-Петербург.
+                    </p>
+                    
+                    <div class="feature-details">
+                        <h3>Как это работает:</h3>
+                        <ul>
+                            <li><strong>Поиск по районам:</strong> Выберите свой район Санкт-Петербурга из полного списка</li>
+                            <li><strong>Выбор поликлиники:</strong> Доступ ко всем поликлиникам, подключенным к системе Горздрав</li>
+                            <li><strong>Специалисты:</strong> Терапевты, педиатры, узкие специалисты по направлениям</li>
+                            <li><strong>Расписание:</strong> Реальное время приёма врачей с учетом занятых слотов</li>
+                            <li><strong>Подтверждение:</strong> Мгновенное подтверждение записи с деталями приёма</li>
+                        </ul>
+                        
+                        <h3>Преимущества:</h3>
+                        <div class="advantages">
+                            <div class="advantage">
+                                <i class="fas fa-clock"></i>
+                                <span>Экономия времени — запись за 2 минуты</span>
+                            </div>
+                            <div class="advantage">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Работает прямо в Telegram на любом устройстве</span>
+                            </div>
+                            <div class="advantage">
+                                <i class="fas fa-bell"></i>
+                                <span>Автоматические напоминания о записи</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2: Расшифровка анализов -->
+            <div class="detailed-feature" id="analysis">
+                <div class="feature-content">
+                    <div class="feature-badge">
+                        <i class="fas fa-robot"></i> ИИ-технологии
+                    </div>
+                    <h2 class="feature-title">
+                        <i class="fas fa-microscope"></i> Расшифровка медицинских анализов
+                    </h2>
+                    <p class="feature-description">
+                        Отправьте фото результатов анализов — получите расшифровку с помощью ИИ и языковой модели Qwen.
+                    </p>
+                    
+                    <div class="feature-details">
+                        <h3>Технологии под капотом:</h3>
+                        <div class="tech-stack">
+                            <div class="tech-item">
+                                <div class="tech-icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="tech-content">
+                                    <h4>EasyOCR</h4>
+                                    <p>Распознавание текста с фотографий анализов</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tech-item">
+                                <div class="tech-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="tech-content">
+                                    <h4>Qwen (OpenRouter)</h4>
+                                    <p>ИИ-анализ распознанных данных</p>
+                                </div>
+                            </div>
+                            
+                            <div class="tech-item">
+                                <div class="tech-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="tech-content">
+                                    <h4>Безопасность данных</h4>
+                                    <p>Временная обработка, изображения не хранятся</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Что анализируется:</h3>
+                        <div class="analysis-types">
+                            <div class="analysis-type">
+                                <h4>Общий анализ крови</h4>
+                                <ul>
+                                    <li>Гемоглобин</li>
+                                    <li>Лейкоциты</li>
+                                    <li>Тромбоциты</li>
+                                    <li>СОЭ</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="analysis-type">
+                                <h4>Биохимия крови</h4>
+                                <ul>
+                                    <li>Глюкоза</li>
+                                    <li>Холестерин</li>
+                                    <li>Печеночные пробы</li>
+                                    <li>Креатинин</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="analysis-type">
+                                <h4>Анализ мочи</h4>
+                                <ul>
+                                    <li>Белок</li>
+                                    <li>Лейкоциты</li>
+                                    <li>Эритроциты</li>
+                                    <li>Удельный вес</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="disclaimer">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p><strong>Важно:</strong> Результаты анализа носят информационный характер и не заменяют консультацию врача.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-media">
+                    <div class="analysis-flow">
+                        <div class="flow-step">
+                            <div class="step-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>1. Фотография</h4>
+                                <p>Сделайте чёткое фото анализа</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-step">
+                            <div class="step-icon">
+                                <i class="fas fa-text-height"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>2. Распознавание</h4>
+                                <p>OCR преобразует фото в текст</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-step">
+                            <div class="step-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>3. ИИ-анализ</h4>
+                                <p>Qwen анализирует показатели</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flow-step">
+                            <div class="step-icon">
+                                <i class="fas fa-comment-medical"></i>
+                            </div>
+                            <div class="step-content">
+                                <h4>4. Результат</h4>
+                                <p>Полная расшифровка с пояснениями</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3: Анализ симптомов -->
+            <div class="detailed-feature" id="symptoms">
+                <div class="feature-media">
+                    <div class="symptoms-interface">
+                        <div class="chat-bubble bot">
+                            Опишите ваши симптомы. Например: "болит горло, температура 37.5"
+                        </div>
+                        <div class="chat-bubble user">
+                            Головная боль в висках, тошнота, слабость
+                        </div>
+                        <div class="chat-bubble bot">
+                            ⚕️ Возможные причины: мигрень, гипертония, переутомление
+                            <br>📋 Рекомендуемые обследования: измерение давления, консультация невролога
+                            <br>🩺 Когда обратиться к врачу: если симптомы не проходят 2 дня
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-content">
+                    <div class="feature-badge">
+                        <i class="fas fa-stethoscope"></i> Медицинский помощник
+                    </div>
+                    <h2 class="feature-title">
+                        <i class="fas fa-stethoscope"></i> Анализ симптомов и рекомендации
+                    </h2>
+                    <p class="feature-description">
+                        Опишите свои симптомы — получите предварительную оценку и рекомендации по дальнейшим действиям.
+                    </p>
+                    
+                    <div class="feature-details">
+                        <h3>Как помогает:</h3>
+                        <div class="help-points">
+                            <div class="help-point">
+                                <div class="help-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div class="help-content">
+                                    <h4>Первичная оценка</h4>
+                                    <p>Помогает понять серьёзность симптомов</p>
+                                </div>
+                            </div>
+                            
+                            <div class="help-point">
+                                <div class="help-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <div class="help-content">
+                                    <h4>Рекомендации по обследованиям</h4>
+                                    <p>Какие анализы сдать, к какому врачу обратиться</p>
+                                </div>
+                            </div>
+                            
+                            <div class="help-point">
+                                <div class="help-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="help-content">
+                                    <h4>Срочность обращения</h4>
+                                    <p>Оценка необходимости срочной медицинской помощи</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Обрабатываемые симптомы:</h3>
+                        <div class="symptoms-categories">
+                            <div class="category">
+                                <h4>Общие симптомы</h4>
+                                <ul>
+                                    <li>Температура</li>
+                                    <li>Слабость, утомляемость</li>
+                                    <li>Головная боль</li>
+                                    <li>Головокружение</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="category">
+                                <h4>Пищеварительная система</h4>
+                                <ul>
+                                    <li>Тошнота, рвота</li>
+                                    <li>Боль в животе</li>
+                                    <li>Диарея, запор</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="category">
+                                <h4>Дыхательная система</h4>
+                                <ul>
+                                    <li>Кашель</li>
+                                    <li>Насморк</li>
+                                    <li>Боль в горле</li>
+                                    <li>Одышка</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 4: ИИ-помощник -->
+            <div class="detailed-feature" id="ai-assistant">
+                <div class="feature-content">
+                    <div class="feature-badge">
+                        <i class="fas fa-robot"></i> Искусственный интеллект
+                    </div>
+                    <h2 class="feature-title">
+                        <i class="fas fa-comments-medical"></i> ИИ-медицинский консультант
+                    </h2>
+                    <p class="feature-description">
+                        Задавайте любые вопросы о здоровье и получайте подробные ответы, основанные на медицинских знаниях.
+                    </p>
+                    
+                    <div class="feature-details">
+                        <h3>Возможности ИИ-помощника:</h3>
+                        
+                        <div class="ai-capabilities">
+                            <div class="ai-capability">
+                                <h4>Ответы на вопросы</h4>
+                                <p>Объяснение медицинских терминов, рекомендации по образу жизни, информация о заболеваниях</p>
+                            </div>
+                            
+                            <div class="ai-capability">
+                                <h4>Образовательные материалы</h4>
+                                <p>Профилактика заболеваний, здоровое питание, физическая активность</p>
+                            </div>
+                            
+                            <div class="ai-capability">
+                                <h4>Поддержка принятия решений</h4>
+                                <p>Помощь в выборе между самолечением и обращением к врачу</p>
+                            </div>
+                        </div>
+                        
+                        <h3>Примеры вопросов:</h3>
+                        <div class="examples">
+                            <div class="example">
+                                <div class="example-question">
+                                    "Что делать при повышенном давлении?"
+                                </div>
+                                <div class="example-answer">
+                                    ИИ предоставит информацию о возможных причинах, экстренных мерах и рекомендации обратиться к врачу
+                                </div>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="example-question">
+                                    "Как правильно подготовиться к сдаче крови?"
+                                </div>
+                                <div class="example-answer">
+                                    Подробный инструктаж по подготовке к различным видам анализов
+                                </div>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="example-question">
+                                    "Какие витамины принимать весной?"
+                                </div>
+                                <div class="example-answer">
+                                    Рекомендации по витаминам с учётом симптомов и общего состояния
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="disclaimer">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p><strong>Помните:</strong> ИИ-помощник не заменяет врача, а предоставляет информационную поддержку.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-media">
+                    <div class="ai-demo">
+                        <div class="demo-title">
+                            <i class="fas fa-comment-dots"></i> Пример диалога с ИИ
+                        </div>
+                        <div class="demo-chat">
+                            <div class="message user">
+                                <div class="avatar">U</div>
+                                <div class="text">Как отличить простуду от гриппа?</div>
+                            </div>
+                            <div class="message bot">
+                                <div class="avatar">AI</div>
+                                <div class="text">
+                                    <strong>Простуда:</strong><br>
+                                    • Начинается постепенно<br>
+                                    • Температура до 37.5°C<br>
+                                    • Насморк, чихание, лёгкая слабость
+                                </div>
+                            </div>
+                            <div class="message bot">
+                                <div class="avatar">AI</div>
+                                <div class="text">
+                                    <strong>Грипп:</strong><br>
+                                    • Резкое начало<br>
+                                    • Температура 38-40°C<br>
+                                    • Сильная слабость, головная боль, ломота в теле
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 5: Напоминания -->
+            <div class="detailed-feature" id="reminders">
+                <div class="feature-media">
+                    <div class="reminder-visual">
+                        <div class="time-indicator">
+                            <div class="time-now">Сейчас</div>
+                            <div class="timeline">
+                                <div class="timeline-marker" style="left: 33%">
+                                    <div class="marker-label">За 3 часа</div>
+                                    <div class="marker-dot"></div>
+                                </div>
+                                <div class="timeline-marker" style="left: 66%">
+                                    <div class="marker-label">За 1 час</div>
+                                    <div class="marker-dot"></div>
+                                </div>
+                                <div class="timeline-marker" style="left: 100%">
+                                    <div class="marker-label">Время приёма</div>
+                                    <div class="marker-dot active"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="reminder-card">
+                            <div class="reminder-header">
+                                <i class="fas fa-bell"></i>
+                                <span>Напоминание о записи</span>
+                            </div>
+                            <div class="reminder-content">
+                                <div class="reminder-detail">
+                                                                <i class="fas fa-user-md"></i>
+                                                                <div>
+                                                                    <strong>Врач:</strong> Иванова А.П. (терапевт)
+                                                                </div>
+                                                            </div>
+                                                            <div class="reminder-detail">
+                                                                <i class="fas fa-clock"></i>
+                                                                <div>
+                                                                    <strong>Время:</strong> Сегодня, 14:30
+                                                                </div>
+                                                            </div>
+                                                            <div class="reminder-detail">
+                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                <div>
+                                                                    <strong>Место:</strong> Поликлиника №1, кабинет 205
+                                                                </div>
+                                                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-content">
+                    <div class="feature-badge">
+                        <i class="fas fa-bell"></i> Автоматизация
+                    </div>
+                    <h2 class="feature-title">
+                        <i class="fas fa-clock"></i> Автоматические напоминания
+                    </h2>
+                    <p class="feature-description">
+                        Никогда не пропускайте приём к врачу благодаря автоматическим напоминаниям в Telegram.
+                    </p>
+                    
+                    <div class="feature-details">
+                        <h3>Настройка напоминаний:</h3>
+                        <ul>
+                            <li><strong>За 3 часа до приёма:</strong> Основное напоминание с деталями записи</li>
+                            <li><strong>За 1 час до приёма:</strong> Финальное напоминание</li>
+                            <li><strong>В день приёма утром:</strong> Напоминание о подготовке</li>
+                        </ul>
+                        
+                        <h3>Преимущества:</h3>
+                        <div class="reminder-benefits">
+                            <div class="benefit">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>Снижение пропусков</h4>
+                                    <p>Уменьшение количества неявок на приём на 70%</p>
+                                </div>
+                            </div>
+                            
+                            <div class="benefit">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>Экономия времени врачей</h4>
+                                    <p>Освобождение слотов для других пациентов</p>
+                                </div>
+                            </div>
+                            
+                            <div class="benefit">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>Удобное планирование</h4>
+                                    <p>Возможность перенести запись при необходимости</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Как настроить:</h3>
+                        <div class="setup-steps">
+                            <div class="setup-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Запись к врачу</h4>
+                                    <p>Запишитесь через бота как обычно</p>
+                                </div>
+                            </div>
+                            
+                            <div class="setup-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Автоматическая настройка</h4>
+                                    <p>Бот автоматически создаст напоминания</p>
+                                </div>
+                            </div>
+                            
+                            <div class="setup-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>Получение уведомлений</h4>
+                                    <p>Получайте напоминания в Telegram</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 6: Безопасность -->
+            <div class="detailed-feature" id="security">
+                <div class="feature-content">
+                    <div class="feature-badge">
+                        <i class="fas fa-shield-alt"></i> Безопасность
+                    </div>
+                    <h2 class="feature-title">
+                        <i class="fas fa-user-shield"></i> Безопасность и конфиденциальность
+                    </h2>
+                    <p class="feature-description">
+                        Максимальная защита ваших медицинских данных в соответствии с российским законодательством.
+                    </p>
+                    
+                    <div class="feature-details">
+                        <h3>Соответствие требованиям:</h3>
+                        <div class="compliance">
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>152-ФЗ</h4>
+                                    <p>Полное соответствие закону о персональных данных</p>
+                                </div>
+                            </div>
+                            
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <i class="fas fa-file-contract"></i>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Политика конфиденциальности</h4>
+                                    <p>Прозрачное описание обработки данных</p>
+                                </div>
+                            </div>
+                            
+                            <div class="compliance-item">
+                                <div class="compliance-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div class="compliance-content">
+                                    <h4>Шифрование</h4>
+                                    <p>End-to-end шифрование всех медицинских данных</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>Меры защиты:</h3>
+                        <div class="security-measures">
+                            <div class="measure">
+                                <h4>Технические меры</h4>
+                                <ul>
+                                    <li>HTTPS/TLS для всех соединений</li>
+                                    <li>Шифрование данных в хранилище</li>
+                                    <li>Регулярные security-аудиты</li>
+                                    <li>DDoS-защита</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="measure">
+                                <h4>Организационные меры</h4>
+                                <ul>
+                                    <li>Ограничение доступа к данным</li>
+                                    <li>Соглашения о конфиденциальности с сотрудниками</li>
+                                    <li>Регулярное обучение по безопасности</li>
+                                    <li>Процедуры реагирования на инциденты</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <h3>ЕСИА интеграция:</h3>
+                        <div class="esia-info">
+                            <div class="esia-badge">
+                                <i class="fas fa-passport"></i> Госуслуги
+                            </div>
+                            <p>Для работы с API Горздрава используется авторизация через ЕСИА (Госуслуги), что обеспечивает:</p>
+                            <ul>
+                                <li>Официальную идентификацию пользователя</li>
+                                <li>Безопасную передачу данных между системами</li>
+                                <li>Соответствие требованиям государственных систем</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-media">
+                    <div class="security-visual">
+                        <div class="security-layers">
+                            <div class="layer">
+                                <div class="layer-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="layer-content">
+                                    <h4>Пользователь</h4>
+                                    <p>Telegram Bot API</p>
+                                </div>
+                            </div>
+                            
+                            <div class="layer">
+                                <div class="layer-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="layer-content">
+                                    <h4>Защита</h4>
+                                    <p>TLS 1.3, OAuth 2.0</p>
+                                </div>
+                            </div>
+                            
+                            <div class="layer">
+                                <div class="layer-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <div class="layer-content">
+                                    <h4>Сервер</h4>
+                                    <p>Шифрование AES-256</p>
+                                </div>
+                            </div>
+                            
+                            <div class="layer">
+                                <div class="layer-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div class="layer-content">
+                                    <h4>Хранилище</h4>
+                                    <p>Encrypted PostgreSQL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Попробуйте все функции бесплатно</h2>
+                <p class="cta-subtitle">
+                    Откройте Горздрав Бот в Telegram и получите доступ ко всем возможностям прямо сейчас
+                </p>
+                
+                <a href="https://t.me/gorzdrav_bot" class="btn btn-primary btn-xlarge" target="_blank">
+                    <i class="fab fa-telegram"></i> Открыть бот в Telegram
+                </a>
+                
+                <p class="cta-note">
+                    <i class="fas fa-info-circle"></i> Все функции доступны без ограничений
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-heart-pulse"></i>
+                        <span>Горздрав Бот</span>
+                    </div>
+                    <p class="footer-description">
+                        Telegram-бот для записи к врачу в Санкт-Петербурге через портал Горздрав
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://github.com/akoffice933-maker/gorzdrav-bot" class="social-link" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://t.me/gorzdrav_bot" class="social-link" target="_blank" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Функции</h3>
+                    <ul class="footer-links">
+                        <li><a href="#appointment">Запись к врачу</a></li>
+                        <li><a href="#analysis">Расшифровка анализов</a></li>
+                        <li><a href="#symptoms">Анализ симптомов</a></li>
+                        <li><a href="#ai-assistant">ИИ-помощник</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Технологии</h3>
+                    <ul class="tech-list">
+                        <li>Python / aiogram</li>
+                        <li>Qwen (OpenRouter)</li>
+                        <li>EasyOCR</li>
+                        <li>FastAPI</li>
+                        <li>ЕСИА интеграция</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Контакты</h3>
+                    <ul class="footer-contacts">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="https://github.com/akoffice933-maker/gorzdrav-bot/issues" target="_blank">
+                                Issues на GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fas fa-code"></i>
+                            <a href="https://github.com/akoffice933-maker/gorzdrav-bot" target="_blank">
+                                Исходный код
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Правовая информация</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy.html">Политика конфиденциальности</a></li>
+                        <li><a href="index.html#faq">FAQ и помощь</a></li>
+                        <li>Соответствие 152-ФЗ</li>
+                        <li>Использует API Горздрав СПб</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">
+                    © 2025 Горздрав Бот. Все права защищены.
+                </p>
+                <p class="legal">
+                    <a href="privacy.html">Политика конфиденциальности</a> |
+                    Использует API <a href="https://gorzdrav.org" target="_blank">Горздрав СПб</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="sticky-cta">
+        <a href="https://t.me/gorzdrav_bot" class="btn btn-primary btn-block" target="_blank">
+            <i class="fab fa-telegram"></i> Открыть в Telegram
+        </a>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/features.js"></script>
+</body>
+</html>

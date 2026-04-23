@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Горздрав Бот | Запись к врачу через Telegram</title>
+    <meta name="description" content="Запишитесь к врачу в Санкт-Петербурге через Telegram-бот Горздрав. Расшифровка анализов, симптомы, ИИ-помощь">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                    <span class="logo-text">Горздрав Бот</span>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#features" class="nav-link">Возможности</a>
+                    <a href="#how-it-works" class="nav-link">Как это работает</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                    <a href="privacy.html" class="nav-link">Конфиденциальность</a>
+                    <a href="#cta" class="btn btn-primary nav-cta">
+                        <i class="fas fa-paper-plane"></i> Открыть в Telegram
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" aria-label="Меню">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge">
+                        <i class="fas fa-check-circle"></i> Работает для СПб | Горздрав API
+                    </span>
+                </div>
+                
+                <h1 class="hero-title">Запишитесь к врачу в несколько кликов</h1>
+                
+                <p class="hero-subtitle">
+                    Telegram-бот с ИИ для жителей Санкт-Петербурга: запись к врачу через Горздрав, 
+                    расшифровка анализов, медицинские консультации и напоминания.
+                </p>
+                
+                <div class="hero-cta">
+                    <a href="#cta" class="btn btn-primary btn-large">
+                        <i class="fab fa-telegram"></i> Открыть бот в Telegram
+                    </a>
+                    <a href="#features" class="btn btn-secondary btn-large">
+                        <i class="fas fa-play-circle"></i> Как это работает
+                    </a>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-count="10000">0</span>
+                        <span class="stat-label">записей к врачу</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-count="95">0</span>
+                        <span class="stat-label">% довольных пользователей</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-count="24">0</span>
+                        <span class="stat-label">часа поддержки</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="mockup-container">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="chat-interface">
+                                <div class="chat-message bot">
+                                    👋 Привет! Я Горздрав Бот
+                                </div>
+                                <div class="chat-message bot">
+                                    Выберите действие:
+                                </div>
+                                <div class="chat-options">
+                                    <button class="chat-option">📅 Запись к врачу</button>
+                                    <button class="chat-option">🔬 Расшифровка анализов</button>
+                                    <button class="chat-option">🩺 Анализ симптомов</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Ключевые возможности</h2>
+                <p class="section-subtitle">Всё, что нужно для вашего здоровья в одном боте</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="feature-title">Запись к врачу</h3>
+                    <p class="feature-description">
+                        Выбор района, поликлиники, врача и времени записи через API Горздрава СПб
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3 class="feature-title">Расшифровка анализов</h3>
+                    <p class="feature-description">
+                        Отправьте фото анализов - получите ИИ-анализ через OCR и языковую модель Qwen
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3 class="feature-title">Анализ симптомов</h3>
+                    <p class="feature-description">
+                        Опишите симптомы - получите рекомендации по обследованиям и специалистам
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="feature-title">Автонапоминания</h3>
+                    <p class="feature-description">
+                        Автоматические напоминания о записи к врачу за 3 часа до приёма
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Безопасность данных</h3>
+                    <p class="feature-description">
+                        Соответствие 152-ФЗ, шифрование, rate limiting и авторизация через ЕСИА
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">ИИ-помощник</h3>
+                    <p class="feature-description">
+                        Ответы на медицинские вопросы через продвинутую языковую модель
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Как это работает</h2>
+                <p class="section-subtitle">Всего 3 простых шага к вашему здоровью</p>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Откройте бот в Telegram</h3>
+                        <p class="step-description">
+                            Найдите @gorzdrav_bot или перейдите по ссылке нажав кнопку ниже
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Выберите нужную функцию</h3>
+                        <p class="step-description">
+                            Запись к врачу, расшифровка анализов или консультация с ИИ
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Получите результат</h3>
+                        <p class="step-description">
+                            Запись подтверждена, анализы расшифрованы или рекомендации получены
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="security">
+        <div class="container">
+            <div class="security-content">
+                <div class="security-info">
+                    <h2 class="section-title">Безопасность и конфиденциальность</h2>
+                    <p class="section-subtitle">
+                        Ваши медицинские данные защищены в соответствии с законодательством РФ
+                    </p>
+                    
+                    <div class="security-features">
+                        <div class="security-feature">
+                            <i class="fas fa-lock"></i>
+                            <span>Соответствие 152-ФЗ о персональных данных</span>
+                        </div>
+                        <div class="security-feature">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Авторизация через ЕСИА (Госуслуги)</span>
+                        </div>
+                        <div class="security-feature">
+                            <i class="fas fa-key"></i>
+                            <span>Шифрование данных end-to-end</span>
+                        </div>
+                        <div class="security-feature">
+                            <i class="fas fa-ban"></i>
+                            <span>Rate limiting для защиты от перегрузок</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="security-image">
+                    <div class="shield-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Часто задаваемые вопросы</h2>
+                <p class="section-subtitle">Всё, что нужно знать о Горздрав Боте</p>
+            </div>
+            
+            <div class="faq-items">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Как начать пользоваться ботом?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Просто откройте бота в Telegram (@gorzdrav_bot) и нажмите /start. Бот проведёт вас через все этапы.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Для каких районов СПб работает запись?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Бот работает со всеми поликлиниками Санкт-Петербурга, подключенными к системе Горздрав.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Безопасно ли отправлять фото анализов?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Да, все данные шифруются и обрабатываются локально. Мы не храним медицинские изображения после обработки.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Что такое ЕСИА и зачем авторизация?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>ЕСИА - Единая система идентификации и аутентификации (Госуслуги). Авторизация требуется для работы с API Горздрава.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Как отменить запись к врачу?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Отправьте команду /cancel в боте и выберите запись для отмены, или свяжитесь с поликлиникой напрямую.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Как удалить свои данные?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Отправьте команду /delete_data в боте. Все ваши данные будут удалены в течение 24 часов.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Начните заботиться о здоровье уже сегодня</h2>
+                <p class="cta-subtitle">
+                    Откройте Горздрав Бот в Telegram и получите доступ ко всем функциям бесплатно
+                </p>
+                
+                <a href="https://t.me/gorzdrav_bot" class="btn btn-primary btn-xlarge" target="_blank">
+                    <i class="fab fa-telegram"></i> Открыть бот в Telegram
+                </a>
+                
+                <p class="cta-note">
+                    <i class="fas fa-info-circle"></i> Бот работает в Telegram на всех устройствах
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-heart-pulse"></i>
+                        <span>Горздрав Бот</span>
+                    </div>
+                    <p class="footer-description">
+                        Telegram-бот для записи к врачу в Санкт-Петербурге через портал Горздрав
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://github.com/akoffice933-maker/gorzdrav-bot" class="social-link" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://t.me/gorzdrav_bot" class="social-link" target="_blank" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Ссылки</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Возможности</a></li>
+                        <li><a href="#how-it-works">Как это работает</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="privacy.html">Конфиденциальность</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Технологии</h3>
+                    <ul class="tech-list">
+                        <li>Python / aiogram</li>
+                        <li>Qwen (OpenRouter)</li>
+                        <li>EasyOCR</li>
+                        <li>FastAPI</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Контакты</h3>
+                    <ul class="footer-contacts">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="https://github.com/akoffice933-maker/gorzdrav-bot/issues" target="_blank">
+                                Issues на GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fas fa-code"></i>
+                            <a href="https://github.com/akoffice933-maker/gorzdrav-bot" target="_blank">
+                                Исходный код
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">
+                    © 2025 Горздрав Бот. Все права защищены.
+                </p>
+                <p class="legal">
+                    <a href="privacy.html">Политика конфиденциальности</a> |
+                    Использует API <a href="https://gorzdrav.org" target="_blank">Горздрав СПб</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="sticky-cta">
+        <a href="https://t.me/gorzdrav_bot" class="btn btn-primary btn-block" target="_blank">
+            <i class="fab fa-telegram"></i> Открыть в Telegram
+        </a>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

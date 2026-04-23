@@ -1,0 +1,82 @@
+{
+  "name": "Горздрав Бот - Запись к врачу через Telegram",
+  "short_name": "Горздрав Бот",
+  "description": "Telegram-бот для записи к врачу в Санкт-Петербурге через портал Горздрав",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F0F9FF",
+  "theme_color": "#0EA5E9",
+  "orientation": "portrait-primary",
+  "categories": ["medical", "health", "productivity"],
+  "lang": "ru-RU",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile.jpg",
+      "sizes": "375x667",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/desktop.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Открыть бот в Telegram",
+      "short_name": "Telegram",
+      "description": "Открыть Горздрав Бот в Telegram",
+      "url": "https://t.me/gorzdrav_bot",
+      "icons": [
+        {
+          "src": "/icons/telegram-icon.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Запись к врачу",
+      "short_name": "Запись",
+      "description": "Записаться к врачу через бот",
+      "url": "/features.html#appointment",
+      "icons": [
+        {
+          "src": "/icons/appointment-icon.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

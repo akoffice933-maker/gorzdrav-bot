@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- Главная страница -->
+    <url>
+        <loc>https://gorzdrav-bot.ru/</loc>
+        <lastmod>2025-04-23</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link 
+            rel="alternate" 
+            hreflang="ru" 
+            href="https://gorzdrav-bot.ru/" 
+        />
+    </url>
+    
+    <!-- Страница возможностей -->
+    <url>
+        <loc>https://gorzdrav-bot.ru/features.html</loc>
+        <lastmod>2025-04-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link 
+            rel="alternate" 
+            hreflang="ru" 
+            href="https://gorzdrav-bot.ru/features.html" 
+        />
+    </url>
+    
+    <!-- Страница FAQ -->
+    <url>
+        <loc>https://gorzdrav-bot.ru/faq.html</loc>
+        <lastmod>2025-04-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+        <xhtml:link 
+            rel="alternate" 
+            hreflang="ru" 
+            href="https://gorzdrav-bot.ru/faq.html" 
+        />
+    </url>
+    
+    <!-- Политика конфиденциальности -->
+    <url>
+        <loc>https://gorzdrav-bot.ru/privacy.html</loc>
+        <lastmod>2025-04-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <xhtml:link 
+            rel="alternate" 
+            hreflang="ru" 
+            href="https://gorzdrav-bot.ru/privacy.html" 
+        />
+    </url>
+    
+</urlset>
