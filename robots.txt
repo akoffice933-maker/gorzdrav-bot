@@ -1,0 +1,40 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /features.html
+Allow: /faq.html
+Allow: /privacy.html
+
+Disallow: /css/
+Disallow: /js/
+
+Sitemap: https://gorzdrav-bot.ru/sitemap.xml
+
+# Боты поисковых систем
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Запрет для нежелательных ботов
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Указание хоста
+Sitemap: https://gorzdrav-bot.ru/sitemap.xml

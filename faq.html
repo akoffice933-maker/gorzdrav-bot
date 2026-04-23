@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Часто задаваемые вопросы | Горздрав Бот | Помощь и инструкции</title>
+    <meta name="description" content="Часто задаваемые вопросы о работе Telegram-бота Горздрав. Инструкции по использованию, помощь по функциям, техническая поддержка">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                    <a href="index.html" class="logo-text">Горздрав Бот</a>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="features.html" class="nav-link">Возможности</a>
+                    <a href="index.html#how-it-works" class="nav-link">Как это работает</a>
+                    <a href="faq.html" class="nav-link active">FAQ</a>
+                    <a href="privacy.html" class="nav-link">Конфиденциальность</a>
+                    <a href="index.html#cta" class="btn btn-primary nav-cta">
+                        <i class="fas fa-paper-plane"></i> Открыть в Telegram
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" aria-label="Меню">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FAQ Header -->
+    <section class="faq-header">
+        <div class="container">
+            <div class="faq-header-content">
+                <h1 class="faq-title">Часто задаваемые вопросы</h1>
+                <p class="faq-subtitle">
+                    Найдите ответы на самые популярные вопросы о работе Горздрав Бота
+                </p>
+                
+                <!-- Search Box -->
+                <div class="faq-search">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="faq-search" placeholder="Поиск по вопросам..." autocomplete="off">
+                        <button class="search-clear" aria-label="Очистить поиск">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="search-hint">
+                        <i class="fas fa-lightbulb"></i>
+                        Попробуйте: "запись к врачу", "анализы", "ЕСИА", "безопасность"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Categories -->
+    <section class="faq-categories">
+        <div class="container">
+            <div class="categories-grid">
+                <a href="#getting-started" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Начало работы</h3>
+                    <p>Как начать пользоваться ботом</p>
+                </a>
+                
+                <a href="#appointment" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Запись к врачу</h3>
+                    <p>Вопросы о записи и отмене</p>
+                </a>
+                
+                <a href="#analysis" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3>Расшифровка анализов</h3>
+                    <p>Как работает ИИ-анализ</p>
+                </a>
+                
+                <a href="#security" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Безопасность</h3>
+                    <p>Конфиденциальность и ЕСИА</p>
+                </a>
+                
+                <a href="#technical" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Технические вопросы</h3>
+                    <p>Ошибки и проблемы</p>
+                </a>
+                
+                <a href="#data" class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Управление данными</h3>
+                    <p>Экспорт и удаление данных</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <section class="faq-main">
+        <div class="container">
+            <!-- Category 1: Getting Started -->
+            <div class="faq-category" id="getting-started">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-rocket"></i> Начало работы с ботом
+                    </h2>
+                    <p class="category-description">
+                        Все, что нужно знать для первого запуска и начала использования
+                    </p>
+                </div>
+                
+                <div class="faq-questions">
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Как найти и открыть бот в Telegram?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Есть несколько способов открыть Горздрав Бот:</p>
+                            
+                            <div class="steps">
+                                <div class="step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>Поиск по имени</h4>
+                                        <p>В Telegram нажмите на значок поиска и введите <code>@gorzdrav_bot</code></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>По прямой ссылке</h4>
+                                        <p>Перейдите по ссылке: <a href="https://t.me/gorzdrav_bot" target="_blank">t.me/gorzdrav_bot</a></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>Через QR-код</h4>
+                                        <p>Отсканируйте QR-код с нашего сайта</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="note">
+                                <i class="fas fa-lightbulb"></i>
+                                <p><strong>Совет:</strong> Для быстрого доступа закрепите бота в меню «Избранное» в Telegram.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Какие команды доступны в боте?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Основные команды бота:</p>
+                            
+                            <div class="commands-grid">
+                                <div class="command-item">
+                                    <code>/start</code>
+                                    <p>Начать работу с ботом, показать главное меню</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/help</code>
+                                    <p>Получить справку по использованию бота</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/appointment</code>
+                                    <p>Записаться на приём к врачу</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/analyze</code>
+                                    <p>Отправить фото анализов для расшифровки</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/symptoms</code>
+                                    <p>Проанализировать симптомы</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/cancel</code>
+                                    <p>Отменить запись к врачу</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/delete_data</code>
+                                    <p>Удалить все ваши данные из системы</p>
+                                </div>
+                                
+                                <div class="command-item">
+                                    <code>/privacy_info</code>
+                                    <p>Получить информацию о политике конфиденциальности</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Нужно ли устанавливать приложение?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p><strong>Нет, устанавливать приложение не нужно.</strong> Горздрав Бот работает прямо в Telegram, который у вас уже установлен.</p>
+                            
+                            <div class="platforms">
+                                <div class="platform">
+                                    <div class="platform-icon">
+                                        <i class="fab fa-android"></i>
+                                    </div>
+                                    <div class="platform-info">
+                                        <h4>Android</h4>
+                                        <p>Работает в приложении Telegram</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="platform">
+                                    <div class="platform-icon">
+                                        <i class="fab fa-apple"></i>
+                                    </div>
+                                    <div class="platform-info">
+                                        <h4>iOS</h4>
+                                        <p>Работает в приложении Telegram</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="platform">
+                                    <div class="platform-icon">
+                                        <i class="fas fa-desktop"></i>
+                                    </div>
+                                    <div class="platform-info">
+                                        <h4>Веб-версия</h4>
+                                        <p>Работает в web.telegram.org</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="platform">
+                                    <div class="platform-icon">
+                                        <i class="fas fa-laptop"></i>
+                                    </div>
+                                    <div class="platform-info">
+                                        <h4>Десктоп</h4>
+                                        <p>Работает в Telegram Desktop</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: Appointment -->
+            <div class="faq-category" id="appointment">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-calendar-check"></i> Запись к врачу
+                    </h2>
+                    <p class="category-description">
+                        Вопросы о записи на приём, отмене записей и работе с расписанием
+                    </p>
+                </div>
+                
+                <div class="faq-questions">
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Для каких районов Санкт-Петербурга работает запись?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Бот работает со всеми поликлиниками Санкт-Петербурга, подключенными к системе Горздрав.</p>
+                            
+                            <div class="districts">
+                                <div class="district-group">
+                                    <h4>Все районы СПб:</h4>
+                                    <ul>
+                                        <li>Адмиралтейский</li>
+                                        <li>Василеостровский</li>
+                                        <li>Выборгский</li>
+                                        <li>Калининский</li>
+                                        <li>Кировский</li>
+                                        <li>Колпинский</li>
+                                        <li>Красногвардейский</li>
+                                        <li>Красносельский</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="district-group">
+                                    <h4>Продолжение:</h4>
+                                    <ul>
+                                        <li>Кронштадтский</li>
+                                        <li>Курортный</li>
+                                        <li>Московский</li>
+                                        <li>Невский</li>
+                                        <li>Петроградский</li>
+                                        <li>Петродворцовый</li>
+                                        <li>Приморский</li>
+                                        <li>Пушкинский</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="district-group">
+                                    <h4>Окончание:</h4>
+                                    <ul>
+                                        <li>Фрунзенский</li>
+                                        <li>Центральный</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="note info">
+                                <i class="fas fa-info-circle"></i>
+                                <p>Если вашей поликлиники нет в списке, возможно, она пока не подключена к системе Горздрав.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Как отменить запись к врачу?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Отменить запись можно несколькими способами:</p>
+                            
+                            <div class="cancellation-methods">
+                                <div class="method">
+                                    <h4>Через бота (рекомендуется)</h4>
+                                    <ol>
+                                        <li>Откройте бот в Telegram</li>
+                                        <li>Отправьте команду <code>/cancel</code></li>
+                                        <li>Выберите запись для отмены из списка</li>
+                                        <li>Подтвердите отмену</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="method">
+                                    <h4>Через меню бота</h4>
+                                    <ol>
+                                        <li>Нажмите на кнопку меню (три линии)</li>
+                                        <li>Выберите "Мои записи"</li>
+                                        <li>Найдите нужную запись</li>
+                                        <li>Нажмите "Отменить запись"</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="method">
+                                    <h4>Прямое обращение</h4>
+                                    <ol>
+                                        <li>Позвоните в вашу поликлинику</li>
+                                        <li>Сообщите данные о записи</li>
+                                        <li>Попросите отменить приём</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <div class="important">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <div>
+                                    <h4>Важная информация:</h4>
+                                    <ul>
+                                        <li>Отмена доступна не позднее чем за 24 часа до приёма</li>
+                                        <li>При частых отменах система может ограничить возможность записи</li>
+                                        <li>Освободившееся время становится доступно другим пациентам</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Как работает система напоминаний?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Бот автоматически отправляет напоминания о записи:</p>
+                            
+                            <div class="reminder-schedule">
+                                <div class="reminder-time">
+                                    <div class="time-badge">
+                                        <i class="fas fa-clock"></i>
+                                        За 3 часа
+                                    </div>
+                                    <p>Основное напоминание с деталями записи</p>
+                                </div>
+                                
+                                <div class="reminder-time">
+                                    <div class="time-badge">
+                                        <i class="fas fa-bell"></i>
+                                        За 1 час
+                                    </div>
+                                    <p>Финальное напоминание</p>
+                                </div>
+                                
+                                <div class="reminder-time">
+                                    <div class="time-badge">
+                                        <i class="fas fa-sun"></i>
+                                        Утром в день приёма
+                                    </div>
+                                    <p>Напоминание о подготовке</p>
+                                </div>
+                            </div>
+                            
+                            <div class="reminder-features">
+                                <h4>Особенности системы:</h4>
+                                <ul>
+                                    <li>Напоминания приходят в виде сообщений в Telegram</li>
+                                    <li>Не требуют дополнительной настройки</li>
+                                    <li>Можно отключить через настройки бота</li>
+                                    <li>При отмене записи напоминания автоматически отменяются</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 3: Analysis -->
+            <div class="faq-category" id="analysis">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-microscope"></i> Расшифровка анализов
+                    </h2>
+                    <p class="category-description">
+                        Как работает ИИ-анализ медицинских анализов и результаты обработки
+                    </p>
+                </div>
+                
+                <div class="faq-questions">
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Безопасно ли отправлять фото анализов?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <div class="security-info">
+                                <div class="security-point positive">
+                                    <div class="point-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="point-content">
+                                        <h4>Безопасно и конфиденциально</h4>
+                                        <p>Все данные обрабатываются с соблюдением требований 152-ФЗ</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-point positive">
+                                    <div class="point-icon">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <div class="point-content">
+                                        <h4>Шифрование данных</h4>
+                                        <p>Передача и хранение данных осуществляется с использованием шифрования</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-point positive">
+                                    <div class="point-icon">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
+                                    <div class="point-content">
+                                        <h4>Временная обработка</h4>
+                                        <p>Медицинские изображения не хранятся после получения результата</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-point positive">
+                                    <div class="point-icon">
+                                        <i class="fas fa-user-shield"></i>
+                                    </div>
+                                    <div class="point-content">
+                                        <h4>Ограниченный доступ</h4>
+                                        <p>Доступ к данным имеют только системы обработки, а не люди</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="note">
+                                <i class="fas fa-lightbulb"></i>
+                                <p><strong>Совет:</strong> Перед отправкой убедитесь, что на фото нет другой личной информации кроме результатов анализов.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Какие анализы можно расшифровать?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Система поддерживает расшифровку большинства распространённых анализов:</p>
+                            
+                            <div class="analysis-types">
+                                <div class="type-group">
+                                    <h4>Кровь</h4>
+                                    <ul>
+                                        <li>Общий анализ крови</li>
+                                        <li>Биохимический анализ</li>
+                                        <li>Коагулограмма</li>
+                                        <li>Гормональные исследования</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="type-group">
+                                    <h4>Моча</h4>
+                                    <ul>
+                                        <li>Общий анализ мочи</li>
+                                        <li>Анализ по Нечипоренко</li>
+                                        <li>Суточный анализ</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="type-group">
+                                    <h4>Прочие</h4>
+                                    <ul>
+                                        <li>Копрограмма</li>
+                                        <li>Мазки</li>
+                                        <li>Справки с результатами</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="limitations">
+                                <h4>Ограничения:</h4>
+                                <ul>
+                                    <li>Не поддерживаются: рентгеновские снимки, КТ, МРТ</li>
+                                    <li>Требуется чёткое фото с хорошим освещением</li>
+                                    <li>Текст должен быть читаемым и на русском языке</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Насколько точна расшифровка анализов?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <div class="accuracy-info">
+                                <div class="accuracy-level">
+                                    <div class="level-badge high">
+                                        <span>95%</span>
+                                    </div>
+                                    <div class="level-info">
+                                        <h4>Высокая точность распознавания</h4>
+                                        <p>OCR система правильно распознаёт текст с анализов</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="accuracy-level">
+                                    <div class="level-badge medium">
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="level-info">
+                                        <h4>Точность интерпретации</h4>
+                                        <p>ИИ корректно интерпретирует большинство показателей</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="important warning">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div>
+                                    <h4>Важное предупреждение:</h4>
+                                    <p><strong>Результаты расшифровки носят информационный характер и не являются медицинским диагнозом.</strong></p>
+                                    <p>Всегда консультируйтесь с врачом для постановки точного диагноза и назначения лечения.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="factors">
+                                <h4>Факторы, влияющие на точность:</h4>
+                                <ul>
+                                    <li>Качество фотографии</li>
+                                    <li>Чёткость текста на бланке</li>
+                                    <li>Стандартность формата анализа</li>
+                                    <li>Наличие референсных значений</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 4: Security -->
+            <div class="faq-category" id="security">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-shield-alt"></i> Безопасность и конфиденциальность
+                    </h2>
+                    <p class="category-description">
+                        Защита данных, ЕСИА авторизация и политика конфиденциальности
+                    </p>
+                </div>
+                
+                <div class="faq-questions">
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Что такое ЕСИА и зачем авторизация через Госуслуги?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <div class="esia-explanation">
+                                <div class="esia-badge">
+                                    <i class="fas fa-passport"></i> ЕСИА
+                                </div>
+                                <p><strong>Единая система идентификации и аутентификации (ЕСИА)</strong> — это государственная система, используемая для авторизации на портале Госуслуги и других государственных сервисах.</p>
+                                
+                                <h4>Зачем нужна авторизация через ЕСИА:</h4>
+                                <div class="reasons">
+                                    <div class="reason">
+                                        <div class="reason-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="reason-content">
+                                            <h5>Официальная идентификация</h5>
+                                            <p>Подтверждение личности пользователя</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="reason">
+                                        <div class="reason-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="reason-content">
+                                            <h5>Требования API Горздрава</h5>
+                                            <p>Необходимо для работы с официальным API</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="reason">
+                                        <div class="reason-icon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="reason-content">
+                                            <h5>Безопасность данных</h5>
+                                            <p>Государственный уровень защиты информации</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="auth-process">
+                                    <h4>Процесс авторизации:</h4>
+                                    <ol>
+                                        <li>Вы выбираете запись к врачу в боте</li>
+                                        <li>Бот перенаправляет вас на страницу Госуслуг</li>
+                                        <li>Вы входите в свой аккаунт Госуслуг</li>
+                                        <li>Система возвращает вас в бота с токеном авторизации</li>
+                                        <li>Бот использует токен для работы с API Горздрава</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-question">
+                        <div class="question-header">
+                            <h3>Как удалить свои данные из системы?</h3>
+                            <button class="toggle-btn">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="question-answer">
+                            <p>Вы можете полностью удалить свои данные несколькими способами:</p>
+                            
+                            <div class="deletion-methods">
+                                <div class="method primary">
+                                    <h4><i class="fas fa-robot"></i> Через бота (самый простой)</h4>
+                                    <p>Отправьте команду <code>/delete_data</code> в боте и подтвердите удаление.</p>
+                                    <div class="deletion-time">
+                                        <i class="fas fa-clock"></i>
+                                        Данные удаляются в течение 24 часов
+                                    </div>
+                                </div>
+                                
+                                <div class="method">
+                                    <h4><i class="fas fa-envelope"></i> По запросу на email</h4>
+                                    <p>Отправьте запрос на адрес <strong>privacy@gorzdrav-bot.ru</strong></p>
+                                    <p>Включите в письмо ваш Telegram ID или username</p>
+                                </div>
+                                
+                                <div class="method">
+                                    <h4><i class="fab fa-github"></i> Через GitHub Issues</h4>
+                                    <p>Создайте issue в репозитории проекта с запросом на удаление данных</p>
+                                </div>
+                            </div>
+                            
+                            <div class="deletion-details">
+                                <h4>Что именно удаляется:</h4>
+                                <ul>
+                                    <li>Telegram ID и профиль</li>
+                                    <li>История записей к врачу</li>
+                                    <li>Тексты запросов и симптомов</li>
+                                    <li>Анонимизированные метрики использования</li>
+                                </ul>
+                                
+                                <div class="note">
+                                    <i class="fas fa-info-circle"></i>
+                                    <p><strong>Примечание:</strong> Некоторые данные (например, логи для безопасности) могут сохраняться дольше в соответствии с законодательством.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="faq-contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="contact-form</h4>
+                                <p>Если у вас есть вопросы, предложения или проблемы, которые не были освещены в FAQ, пожалуйста, свяжитесь с нами:</p>
+                                
+                                <div class="contact-options">
+                                    <div class="contact-option">
+                                        <div class="option-icon">
+                                            <i class="fab fa-github"></i>
+                                        </div>
+                                        <div class="option-content">
+                                            <h5>GitHub Issues</h5>
+                                            <p>Для технических вопросов и сообщений об ошибках</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="contact-option">
+                                        <div class="contact-icon">
+                                            <i class="fab fa-telegram"></i>
+                                        </div>
+                                        <div class="contact-info">
+                                            <h5>Telegram Bot</h5>
+                                            <p>Используйте команду <code>/help</code> в боте для получения поддержки</p>
+                                            <a href="https://t.me/gorzdrav_bot" target="_blank" class="contact-link">@gorzdrav_bot</a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="contact-option">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="contact-info">
+                                            <h5>Электронная почта</h5>
+                                            <p>Для официальных запросов и претензий</p>
+                                            <a href="mailto:privacy@gorzdrav-bot.ru" class="contact-link">privacy@gorzdrav-bot.ru</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Section -->
+            <div class="faq-contact">
+                <div class="contact-card">
+                    <h3>Не нашли ответ на ваш вопрос?</h3>
+                    <p>Свяжитесь с нами, и мы поможем решить вашу проблему</p>
+                    <div class="contact-buttons">
+                        <a href="https://github.com/akoffice933-maker/gorzdrav-bot/issues" class="btn btn-primary" target="_blank">
+                            <i class="fab fa-github"></i> Создать issue
+                        </a>
+                        <a href="https://t.me/gorzdrav_bot" class="btn btn-secondary" target="_blank">
+                            <i class="fab fa-telegram"></i> Написать в боте
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-heart-pulse"></i>
+                        <span>Горздрав Бот</span>
+                    </div>
+                    <p class="footer-description">
+                        Telegram-бот для записи к врачу в Санкт-Петербурге через портал Горздрав
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://github.com/akoffice933-maker/gorzdrav-bot" class="social-link" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://t.me/gorzdrav_bot" class="social-link" target="_blank" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Разделы FAQ</h3>
+                    <ul class="footer-links">
+                        <li><a href="#getting-started">Начало работы</a></li>
+                        <li><a href="#appointment">Запись к врачу</a></li>
+                        <li><a href="#analysis">Расшифровка анализов</a></li>
+                        <li><a href="#security">Безопасность</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Дополнительно</h3>
+                    <ul class="footer-links">
+                        <li><a href="features.html">Все возможности</a></li>
+                        <li><a href="privacy.html">Конфиденциальность</a></li>
+                        <li><a href="index.html#how-it-works">Как это работает</a></li>
+                        <li><a href="index.html">На главную</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Контакты поддержки</h3>
+                    <ul class="footer-contacts">
+                        <li>
+                            <i class="fab fa-github"></i>
+                            <a href="https://github.com/akoffice933-maker/gorzdrav-bot/issues" target="_blank">
+                                GitHub Issues
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fab fa-telegram"></i>
+                            <a href="https://t.me/gorzdrav_bot" target="_blank">
+                                @gorzdrav_bot
+                            </a>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:privacy@gorzdrav-bot.ru">
+                                privacy@gorzdrav-bot.ru
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">
+                    © 2025 Горздрав Бот. Все права защищены.
+                </p>
+                <p class="legal">
+                    <a href="privacy.html">Политика конфиденциальности</a> |
+                    Использует API <a href="https://gorzdrav.org" target="_blank">Горздрав СПб</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="sticky-cta">
+        <a href="https://t.me/gorzdrav_bot" class="btn btn-primary btn-block" target="_blank">
+            <i class="fab fa-telegram"></i> Открыть в Telegram
+        </a>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/faq.js"></script>
+</body>
+</html>
