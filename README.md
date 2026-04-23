@@ -107,13 +107,42 @@ python bot.py
 
 Веб-сайт уже настроен для автоматического развертывания через GitHub Pages. Для активации:
 
-1. Перейдите в настройки репозитория на GitHub → **Pages**
-2. В разделе **Source** выберите ветку `main` и папку `/website`
-3. Нажмите **Save**
+### Активация GitHub Pages (требуется один раз)
 
-Сайт будет доступен по адресу: `https://<ваш-username>.github.io/gorzdrav-bot/`
+1. Перейдите в репозиторий на GitHub: [https://github.com/akoffice933-maker/gorzdrav-bot](https://github.com/akoffice933-maker/gorzdrav-bot)
+2. Нажмите на вкладку **Settings** (настройки)
+3. В левом меню выберите **Pages**
+4. В разделе **Source** выберите:
+   - Branch: `main`
+   - Folder: `/website`
+5. Нажмите **Save**
 
-**Альтернативно** можно использовать GitHub Actions для автоматического деплоя. В проекте уже есть файл `DEPLOYMENT.md` в папке `website/` с детальными инструкциями.
+Через 1-2 минуты сайт будет доступен по адресу: [https://akoffice933-maker.github.io/gorzdrav-bot/](https://akoffice933-maker.github.io/gorzdrav-bot/)
+
+### Если возникает ошибка 404
+
+Если после активации сайт всё ещё возвращает 404, выполните следующие действия:
+
+1. **Проверьте статус деплоя**:
+   - Перейдите на вкладку **Actions** в репозитории
+   - Убедитесь, что workflow `Deploy to GitHub Pages` выполнен успешно (зелёная галочка)
+   - Если workflow завершился с ошибкой, проверьте логи
+
+2. **Ручной запуск workflow**:
+   - Во вкладке **Actions** выберите workflow `Deploy to GitHub Pages`
+   - Нажмите **Run workflow** → выберите ветку `main` и запустите
+
+3. **Альтернативный метод деплоя через ветку `gh-pages`**:
+   ```bash
+   git subtree push --prefix website origin gh-pages
+   ```
+   Затем в настройках Pages укажите источник: ветка `gh-pages`, папка `/` (root)
+
+### Автоматический деплой
+
+При каждом пуше в ветку `main` изменения в папке `website/` автоматически деплоятся через GitHub Actions. Workflow файл `.github/workflows/deploy.yml` уже настроен.
+
+Подробные инструкции также доступны в файле `website/DEPLOYMENT.md`.
 
 ## Получение API-ключей
 
