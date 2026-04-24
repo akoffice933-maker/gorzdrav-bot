@@ -50,7 +50,7 @@ gorzdrav/
 │   ├── test_validators.py       # Тесты валидаторов
 │   └── test_ratelimit.py        # Тесты rate limiting
 │
-├── website/                     # Веб-сайт проекта
+├── docs/                        # Веб-сайт проекта (GitHub Pages)
 │   ├── index.html               # Главная страница
 │   ├── features.html            # Страница функций
 │   ├── faq.html                 # FAQ
@@ -114,7 +114,7 @@ python bot.py
 3. В левом меню выберите **Pages**
 4. В разделе **Source** выберите:
    - Branch: `main`
-   - Folder: `/website`
+   - Folder: `/docs`
 5. Нажмите **Save**
 
 Через 1-2 минуты сайт будет доступен по адресу: [https://akoffice933-maker.github.io/gorzdrav-bot/](https://akoffice933-maker.github.io/gorzdrav-bot/)
@@ -134,15 +134,15 @@ python bot.py
 
 3. **Альтернативный метод деплоя через ветку `gh-pages`**:
    ```bash
-   git subtree push --prefix website origin gh-pages
+   git subtree push --prefix docs origin gh-pages
    ```
    Затем в настройках Pages укажите источник: ветка `gh-pages`, папка `/` (root)
 
 ### Автоматический деплой
 
-При каждом пуше в ветку `main` изменения в папке `website/` автоматически деплоятся через GitHub Actions. Workflow файл `.github/workflows/deploy.yml` уже настроен.
+При каждом пуше в ветку `main` изменения в папке `docs/` автоматически деплоятся через GitHub Actions. Workflow файл `.github/workflows/deploy.yml` уже настроен.
 
-Подробные инструкции также доступны в файле `website/DEPLOYMENT.md`.
+Подробные инструкции также доступны в файле `docs/DEPLOYMENT.md`.
 
 ## Получение API-ключей
 
